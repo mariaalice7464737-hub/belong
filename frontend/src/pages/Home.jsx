@@ -4,62 +4,100 @@ import { useApp } from '../AppContext'
 import { PassCarousel } from '../components/BoardingPass'
 import Icon from '../components/Icon'
 import { Kicker } from '../components/ui'
-import { CPT_TZ, SP_TZ, WeatherIcon, WeatherSheet, fmtTime, useNow, useRate, useWeather, wmo } from '../components/Live'
+import { CPT_TZ, SP_TZ, WeatherIcon, WeatherSheet, fmtTime, refreshRates, useNow, useRate, useWeather, wmo } from '../components/Live'
 
-/** Paisagem de Cape Town ao entardecer (usada se não houver foto em public/images/hero.jpg). */
+/**
+ * Paisagem de Cape Town vista da baía: Devil's Peak à esquerda, o topo reto da
+ * Table Mountain no centro, os Twelve Apostles descendo atrás e o Lion's Head
+ * com o Signal Hill à direita. (Usada se não houver foto em public/images/hero.jpg.)
+ */
 function HeroArt() {
   return (
-    <svg className="hero-art" viewBox="0 430 400 370" preserveAspectRatio="none" aria-hidden>
+    <svg className="hero-art" viewBox="-400 442 1200 358" preserveAspectRatio="xMidYMax slice" aria-hidden>
       <defs>
         <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor="#6f8f97" />
           <stop offset="1" stopColor="#2f4d57" />
         </linearGradient>
+        <linearGradient id="rock" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#647f88" />
+          <stop offset="1" stopColor="#526d76" />
+        </linearGradient>
       </defs>
-      {/* Lion's Head + Table Mountain + Devil's Peak */}
-      <path fill="#5f7a82" d="M-60 560 L20 520 L45 470 L58 452 L70 470 L92 515 L120 500 L150 452 L330 444 L350 430 L372 404 L392 428 L460 500 L460 600 L-60 600Z" />
-      <path fill="#4b666f" opacity=".85" d="M-60 575 L60 548 L140 556 L230 540 L330 552 L460 536 L460 610 L-60 610Z" />
-      <rect x="-60" y="580" width="520" height="220" fill="url(#sea)" />
+      {/* Twelve Apostles: contrafortes recortados atrás, descendo para o sul (direita) */}
+      <path fill="#7d959c" opacity=".75"
+        d="M226 470 L236 462 L242 468 L250 458 L257 466 L264 456 L271 465 L279 457 L286 467 L294 460 L301 470 L309 463
+           L316 474 L324 468 L332 480 L345 486 L380 494 L420 492 L460 502 L520 506 L600 520 L800 536 L800 580 L226 580Z" />
+      {/* Morros baixos à esquerda, depois do Devil's Peak */}
+      <path fill="#6a848c" d="M-400 552 L-300 540 L-200 528 L-120 520 L-60 510 L-20 512 L20 530 L20 580 L-400 580Z" />
+      {/* Devil's Peak + Table Mountain (topo reto, paredões) + descida até o Kloof Nek */}
+      <path fill="url(#rock)"
+        d="M-400 590 L-400 576 C-260 570 -140 556 -60 540 C-30 524 -5 508 12 490 L28 470 L41 452 L50 466 L64 484 L78 490 L92 476 L98 462 L104 455
+           L226 453 L232 458 L238 476 L246 500 L262 520 L284 528 L300 532 L300 600 L-400 600Z" />
+      {/* Lion's Head (cúpula com o bico) + Signal Hill, que desce até Sea Point */}
+      <path fill="#5a7680"
+        d="M262 560 C282 540 296 512 306 486 C312 470 317 458 322 452 C325 448 330 448 333 452 C338 460 342 474 347 490
+           C354 510 364 522 380 528 C400 534 430 534 470 538 C540 544 640 552 800 560 L800 600 L262 600Z" />
+      {/* Encosta da cidade */}
+      <path fill="#4b666f" opacity=".9" d="M-400 574 L-200 566 L-60 572 L40 556 L120 562 L200 552 L280 560 L360 552 L460 558 L600 562 L800 566 L800 610 L-400 610Z" />
+      <rect x="-400" y="580" width="1200" height="220" fill="url(#sea)" />
       <g stroke="#fff3df" strokeOpacity=".35" strokeWidth="1.2">
-        <path d="M250 600h80M220 618h120M260 640h70M200 664h90" />
+        <path d="M250 600h80M220 618h120M260 640h70M200 664h90M-180 610h90M520 626h110M-260 650h70" />
       </g>
       {/* Muro da orla de Sea Point */}
-      <path fill="#1f3640" d="M-60 742 Q200 726 460 738 L460 800 L-60 800Z" />
+      <path fill="#1f3640" d="M-400 744 Q200 722 800 744 L800 800 L-400 800Z" />
     </svg>
   )
 }
 
-/** Faixa do topo: clima, horários e câmbio, ao vivo. */
-function HeroLive() {
+const agoLabel = (t, now) => {
+  if (!t) return null
+  const min = Math.floor((now - t) / 60000)
+  return min < 1 ? 'agora há pouco' : min === 1 ? 'há 1 min' : min < 60 ? `há ${min} min` : `às ${new Date(t).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`
+}
+
+/** Painel compacto: clima, horários e câmbio, com indicação de atualização. */
+function LivePanel() {
   const { guide } = useApp()
-  const { w, failed } = useWeather()
+  const { w, failed, loading, refresh } = useWeather()
   const now = useNow(1000)
   const fx = useRate('ZAR', 'BRL', { rate: guide.currency.default_fx, date: guide.currency.fx_date })
   const [open, setOpen] = useState(false)
   const c = w?.current
+  const updated = Math.min(...[w?.fetchedAt, fx.fetchedAt].filter(Boolean)) || null
+  const offline = failed || !fx.live
+  const doRefresh = () => { refresh(); refreshRates('ZAR') }
+
   return (
-    <div className="hero-live">
-      <button type="button" className="live-pill live-weather" onClick={() => w && setOpen(true)} disabled={!w}
-        aria-label={c ? `Clima em Cape Town: ${Math.round(c.temperature_2m)} graus, ${wmo(c.weather_code)[0]}. Ver a semana` : 'Clima em Cape Town'}>
-        {c ? (
-          <>
-            <WeatherIcon code={c.weather_code} isDay={c.is_day} size={40} />
-            <span>
-              <strong>{Math.round(c.temperature_2m)}°C</strong>
-              <small>{wmo(c.weather_code)[0]}</small>
-            </span>
-          </>
-        ) : (
-          <span><strong>—°C</strong><small>{failed ? 'Clima indisponível' : 'Carregando clima…'}</small></span>
-        )}
-      </button>
-      <Link to="/essenciais" className="live-pill live-time" aria-label="Horário em Cape Town e São Paulo">
-        <span><small>CPT</small><b>{fmtTime(now, CPT_TZ)}</b></span>
-        <span><small>SP</small><b>{fmtTime(now, SP_TZ)}</b></span>
-      </Link>
-      <Link to="/essenciais" className="live-pill live-fx" aria-label="Cotação do rand">
-        <small>R 1 =</small><b>R$ {fx.rate ? fx.rate.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '—'}</b>
-      </Link>
+    <div className="live-panel">
+      <div className="live-cells">
+        <button type="button" className="live-cell" onClick={() => w && setOpen(true)} disabled={!w}
+          aria-label={c ? `Clima: ${Math.round(c.temperature_2m)} graus, ${wmo(c.weather_code)[0]}. Ver a semana` : 'Clima'}>
+          <span className="live-label">Clima</span>
+          <span className="live-main">
+            {c ? <WeatherIcon code={c.weather_code} isDay={c.is_day} size={26} /> : null}
+            <b>{c ? `${Math.round(c.temperature_2m)}°C` : '—'}</b>
+          </span>
+          <small>{c ? wmo(c.weather_code)[0] : failed ? 'Indisponível' : 'Carregando…'}</small>
+        </button>
+        <Link to="/essenciais" className="live-cell" aria-label="Horário em Cape Town e São Paulo">
+          <span className="live-label">Cape Town</span>
+          <span className="live-main"><b>{fmtTime(now, CPT_TZ)}</b></span>
+          <small>SP {fmtTime(now, SP_TZ)}</small>
+        </Link>
+        <Link to="/essenciais" className="live-cell" aria-label="Cotação do rand em reais">
+          <span className="live-label">Câmbio</span>
+          <span className="live-main"><b>R$ {fx.rate ? fx.rate.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '—'}</b></span>
+          <small>por R 1</small>
+        </Link>
+      </div>
+      <div className="live-foot">
+        <span className={`live-dot ${offline ? 'is-off' : ''}`} aria-hidden />
+        <span>{offline ? 'Sem conexão · usando dados salvos' : `Ao vivo · atualizado ${agoLabel(updated, now)}`}</span>
+        <button type="button" className={`live-refresh ${loading ? 'is-spinning' : ''}`} onClick={doRefresh} aria-label="Atualizar clima e câmbio">
+          <Icon name="refresh" size={14} />
+        </button>
+      </div>
       <WeatherSheet w={w} open={open} onClose={() => setOpen(false)} />
     </div>
   )
@@ -81,14 +119,14 @@ export default function Home() {
         <HeroArt />
         <div className="hero-photo" />
         <div className="hero-shade" />
-        <HeroLive />
-        <h1 className="hero-title">
-          <span className="ht-line">Travel</span>
-          <span className="ht-script">to</span>
-          <span className="ht-line ht-small">South Africa</span>
-        </h1>
+        <div className="hero-head">
+          <span className="hero-kicker">Your city</span>
+          <h1 className="hero-city">Cape Town</h1>
+          <p className="hero-sub">Explore your new home</p>
+          <LivePanel />
+        </div>
         <div className="hero-corners hero-bottom">
-          <span>Between<br />now<br />and<br />summer</span>
+          <span>Find<br />your<br />place</span>
           <span className="ta-right hero-cta">Chapter one:<br />the map <Icon name="arrow" size={16} /></span>
         </div>
       </section>

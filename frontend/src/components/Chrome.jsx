@@ -12,7 +12,7 @@ export function TopBar() {
   return (
     <header className={`topbar ${isHome ? 'is-overlay' : ''}`}>
       {isHome
-        ? <span className="topbar-brand">CT<i>·</i>editorial</span>
+        ? <span className="topbar-brand"><b>belong<i>.</i></b><small>Cape Town Edition</small></span>
         : <Link to="/" className="icon-btn" aria-label="Voltar para o início"><Icon name="back" /></Link>}
       {!isHome && <span className="topbar-title">{TITLES[pathname]}</span>}
       <span className={`save-dot is-${saveStatus}`} title={saveStatus === 'saved' ? 'Salvo' : ''} />

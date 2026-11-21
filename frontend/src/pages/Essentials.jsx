@@ -158,13 +158,8 @@ function Weather() {
 /** Quantos reais vale 1 unidade de cada moeda (cotação do dia; sem internet, só o rand). */
 function useBrlPer() {
   const { guide } = useApp()
-  const [rates, setRates] = useState(rateCache.BRL?.rates || null)
-  useEffect(() => {
-    if (rateCache.BRL) return
-    fetch('https://open.er-api.com/v6/latest/BRL').then((r) => r.json()).then((j) => {
-      if (j?.rates) { rateCache.BRL = { rates: j.rates }; setRates(j.rates) }
-    }).catch(() => {})
-  }, [])
+  useRate('BRL', 'ZAR', { rate: 1 / guide.currency.default_fx, date: guide.currency.fx_date })
+  const rates = rateCache.BRL?.rates
   return (code) => (code === 'BRL' ? 1 : rates?.[code] ? 1 / rates[code] : code === 'ZAR' ? guide.currency.default_fx : null)
 }
 

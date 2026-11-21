@@ -84,28 +84,46 @@ export function WeatherIcon({ code, isDay = 1, size = 28, className = '' }) {
   )
 }
 
-// Uma busca só por sessão, compartilhada entre a Home e Essenciais.
+// Uma busca compartilhada entre a Home e Essenciais; atualiza sozinha a cada 15 min.
+const WEATHER_TTL = 15 * 60 * 1000
 let weatherPromise = null
+let weatherAt = 0
+const weatherSubs = new Set()
+
+function loadWeather(lat, lon, force = false) {
+  if (!force && weatherPromise && Date.now() - weatherAt < WEATHER_TTL) return weatherPromise
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
+    '&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,is_day' +
+    '&hourly=temperature_2m,weather_code,precipitation_probability,wind_speed_10m,is_day' +
+    '&daily=weather_code,temperature_2m_max,temperature_2m_min,uv_index_max,sunrise,sunset,precipitation_probability_max' +
+    '&forecast_days=7&timezone=Africa%2FJohannesburg'
+  weatherAt = Date.now()
+  weatherPromise = fetch(url).then((r) => r.json()).then((j) => { if (!j?.current) throw new Error('sem dados'); return { ...j, fetchedAt: Date.now() } })
+  weatherPromise.catch(() => { weatherPromise = null })
+  weatherSubs.forEach((fn) => fn(weatherPromise))
+  return weatherPromise
+}
+
 export function useWeather() {
   const { guide } = useApp()
   const { lat, lon } = guide.destinations.home
   const [w, setW] = useState(null)
   const [failed, setFailed] = useState(false)
+  const [loading, setLoading] = useState(false)
   useEffect(() => {
     let alive = true
-    if (!weatherPromise) {
-      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
-        '&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,is_day' +
-        '&hourly=temperature_2m,weather_code,precipitation_probability,wind_speed_10m,is_day' +
-        '&daily=weather_code,temperature_2m_max,temperature_2m_min,uv_index_max,sunrise,sunset,precipitation_probability_max' +
-        '&forecast_days=7&timezone=Africa%2FJohannesburg'
-      weatherPromise = fetch(url).then((r) => r.json()).then((j) => { if (!j?.current) throw new Error('sem dados'); return j })
-      weatherPromise.catch(() => { weatherPromise = null })
+    const follow = (pr) => {
+      setLoading(true)
+      pr.then((j) => { if (alive) { setW(j); setFailed(false) } })
+        .catch(() => alive && setFailed(true))
+        .finally(() => alive && setLoading(false))
     }
-    weatherPromise.then((j) => alive && setW(j)).catch(() => alive && setFailed(true))
-    return () => { alive = false }
+    weatherSubs.add(follow)
+    follow(loadWeather(lat, lon))
+    const t = setInterval(() => loadWeather(lat, lon), WEATHER_TTL)
+    return () => { alive = false; weatherSubs.delete(follow); clearInterval(t) }
   }, [lat, lon])
-  return { w, failed }
+  return { w, failed, loading, refresh: () => loadWeather(lat, lon, true) }
 }
 
 const hourOf = (iso) => iso.slice(11, 13) + 'h'
@@ -173,29 +191,37 @@ export function WeatherSheet({ w, open, startDay = 0, onClose }) {
 
 /* ---------- Câmbio ---------- */
 export const rateCache = {}
+const rateSubs = new Set()
+
+function loadRates(from, force = false) {
+  const hit = rateCache[from]
+  if (!force && hit && (hit.promise || Date.now() - hit.fetchedAt < 60 * 60 * 1000)) return
+  rateCache[from] = { ...(hit || {}), promise: true }
+  fetch(`https://open.er-api.com/v6/latest/${from}`)
+    .then((r) => r.json())
+    .then((j) => {
+      if (!j?.rates) throw new Error('sem cotação')
+      rateCache[from] = { rates: j.rates, date: new Date(j.time_last_update_unix * 1000).toLocaleDateString('pt-BR'), fetchedAt: Date.now() }
+    })
+    .catch(() => { rateCache[from] = hit?.rates ? hit : undefined })
+    .finally(() => rateSubs.forEach((fn) => fn()))
+}
+export const refreshRates = (from) => loadRates(from, true)
 
 /** Cotação do dia de uma moeda para outra (open.er-api.com, sem chave). */
 export function useRate(from, to, fallback) {
-  const [live, setLive] = useState(rateCache[from] || null)
+  const [, bump] = useState(0)
   useEffect(() => {
-    let alive = true
-    if (rateCache[from]) { setLive(rateCache[from]); return }
-    setLive(null)
-    fetch(`https://open.er-api.com/v6/latest/${from}`)
-      .then((r) => r.json())
-      .then((j) => {
-        if (!alive || !j?.rates) return
-        rateCache[from] = { rates: j.rates, date: new Date(j.time_last_update_unix * 1000).toLocaleDateString('pt-BR') }
-        setLive(rateCache[from])
-      })
-      .catch(() => {})
-    return () => { alive = false }
+    const fn = () => bump((n) => n + 1)
+    rateSubs.add(fn)
+    loadRates(from)
+    return () => rateSubs.delete(fn)
   }, [from])
+  const live = rateCache[from]?.rates ? rateCache[from] : null
   if (from === to) return { rate: 1, source: 'mesma moeda' }
-  if (live?.rates?.[to]) return { rate: live.rates[to], source: `cotação do dia · ${live.date}` }
+  if (live?.rates?.[to]) return { rate: live.rates[to], source: `cotação do dia · ${live.date}`, fetchedAt: live.fetchedAt, live: true }
   // Sem internet: só sabemos rand ↔ real (cotação salva no guide.json).
   if (from === 'ZAR' && to === 'BRL') return { rate: fallback.rate, source: `cotação salva · ${fallback.date} (sem internet)` }
   if (from === 'BRL' && to === 'ZAR') return { rate: 1 / fallback.rate, source: `cotação salva · ${fallback.date} (sem internet)` }
   return { rate: null, source: 'sem internet para buscar essa cotação' }
 }
-

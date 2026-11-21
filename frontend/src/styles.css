@@ -652,17 +652,35 @@ a.ch:active { background: var(--paper-2); }
 @media (max-width: 380px) { .hourly li { grid-template-columns: 44px 22px minmax(0, 1fr) 36px 38px; } .h-wind { display: none; } }
 
 /* ---- Internet ---- */
-.net-steps { list-style: none; counter-reset: s; margin: 0 0 16px; padding: 0; display: grid; gap: 10px; }
-.net-steps li { counter-increment: s; display: grid; grid-template-columns: 30px minmax(0, 1fr); column-gap: 10px; }
-.net-steps li::before { content: counter(s); grid-row: span 2; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%;
-  background: var(--navy); color: var(--white); font: 500 13px var(--mono); }
-.net-steps b { font-weight: 500; }
-.net-steps span { color: var(--muted); font-size: 15px; }
-.net-plans { list-style: none; margin: 0 0 12px; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
-.net-plans li { display: grid; gap: 2px; padding: 12px; border-radius: 14px; background: var(--card); box-shadow: 0 0 0 1px var(--line); }
-.net-plans small { font: 500 10.5px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
-.net-plans strong { font: 500 17px/1.2 var(--sans); }
-.net-plans .mono { font-size: 13px; }
-.net-plans em { font: inherit; font-style: normal; color: var(--muted); white-space: nowrap; }
-.net-card { display: grid; gap: 4px; }
-.net-select { width: 100%; font: 400 16px var(--sans); padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); }
+.net-chosen { display: grid; gap: 2px; padding: 14px 16px; margin-bottom: 14px; border-radius: 16px; background: var(--navy); color: var(--white); }
+.net-chosen .mono-label { opacity: .7; }
+.net-chosen strong { font: 500 18px var(--sans); }
+.net-chosen span:last-child { font: 400 14px var(--mono); opacity: .85; }
+.net-kinds { display: flex; gap: 8px; flex-wrap: wrap; }
+.net-hint { font-size: 14.5px; margin: 8px 0 12px; }
+.net-provs { margin-bottom: 10px; }
+.net-card { display: grid; gap: 6px; }
+.net-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.net-plan { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px; border-radius: 12px; cursor: pointer; text-align: left;
+  border: 1px solid var(--line); background: var(--paper); color: var(--ink); font: inherit; }
+.net-plan.is-on { border-color: var(--navy); background: rgba(14, 38, 58, .06); box-shadow: inset 0 0 0 1px var(--navy); }
+.net-radio { width: 20px; height: 20px; border-radius: 50%; border: 2px solid rgba(19, 33, 43, .35); flex: none; }
+.is-on .net-radio { border: 6px solid var(--navy); }
+.net-plan-main { flex: 1; display: grid; }
+.net-plan-main strong { font: 500 17px var(--sans); }
+.net-plan-main strong small { font-weight: 400; font-size: 13px; color: var(--muted); }
+.net-plan-main > small { font-size: 13px; color: var(--muted); }
+.net-plan-price { display: grid; text-align: right; white-space: nowrap; }
+.net-plan-price b { font: 500 15px var(--mono); }
+.net-plan-price small { font-size: 12.5px; color: var(--muted); }
+.net-remove { justify-self: end; font-size: 13px; }
+.net-list li { display: grid; }
+.net-add-wrap { margin: 12px 0; }
+.net-add-wrap summary { cursor: pointer; color: var(--petrol); font-size: 15px; }
+.net-add { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 10px; padding: 14px; border-radius: 16px; background: var(--card); box-shadow: 0 0 0 1px var(--line); }
+.net-add .field:first-child, .net-add .field:nth-child(4), .net-add .btn { grid-column: 1 / -1; }
+.net-price-in { display: flex; gap: 6px; }
+.net-price-in select { border: 1px solid var(--line); border-radius: 10px; background: var(--paper); font: 400 16px var(--sans); padding: 0 6px; }
+.net-price-in input { flex: 1; min-width: 0; }
+.net-add .btn:disabled { opacity: .4; }
+.net-checks { margin-top: 12px; }

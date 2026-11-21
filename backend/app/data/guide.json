@@ -1389,5 +1389,208 @@
       ],
       "note": "Sun City e o Pilanesberg, um safári perto de Joanesburgo."
     }
-  ]
+  ],
+  "internet": {
+    "checked": "nov/2026",
+    "kinds": [
+      {
+        "id": "chip",
+        "label": "Chip local",
+        "hint": "Número sul-africano, mais barato por GB. Precisa de registro RICA (passaporte + endereço)."
+      },
+      {
+        "id": "esim",
+        "label": "eSIM de viagem",
+        "hint": "Compra pelo app antes de embarcar e já chega conectada. Só dados, sem número local."
+      }
+    ],
+    "providers": [
+      {
+        "id": "vodacom",
+        "kind": "chip",
+        "name": "Vodacom",
+        "url": "https://www.vodacom.co.za/vodacom/shopping/data/prepaid-data",
+        "note": "Metade de cada pacote é “Night Owl”: só vale de madrugada.",
+        "plans": [
+          {
+            "gb": 5,
+            "bonus": 5,
+            "days": 30,
+            "price": 99,
+            "cur": "ZAR"
+          },
+          {
+            "gb": 10,
+            "bonus": 10,
+            "days": 30,
+            "price": 149,
+            "cur": "ZAR"
+          },
+          {
+            "gb": 20,
+            "bonus": 20,
+            "days": 30,
+            "price": 229,
+            "cur": "ZAR"
+          },
+          {
+            "gb": 50,
+            "bonus": 50,
+            "days": 30,
+            "price": 349,
+            "cur": "ZAR"
+          },
+          {
+            "gb": 100,
+            "bonus": 100,
+            "days": 30,
+            "price": 449,
+            "cur": "ZAR"
+          }
+        ]
+      },
+      {
+        "id": "mtn",
+        "kind": "chip",
+        "name": "MTN",
+        "url": "https://www.mtn.co.za",
+        "note": "Preços do plano BozzaGigs; os com bônus têm metade noturna.",
+        "plans": [
+          {
+            "gb": 7.5,
+            "bonus": 7.5,
+            "days": 30,
+            "price": 129,
+            "cur": "ZAR"
+          },
+          {
+            "gb": 10,
+            "bonus": 10,
+            "days": 30,
+            "price": 149,
+            "cur": "ZAR"
+          },
+          {
+            "gb": 30,
+            "days": 30,
+            "price": 239,
+            "cur": "ZAR"
+          }
+        ]
+      },
+      {
+        "id": "cellc",
+        "kind": "chip",
+        "name": "Cell C",
+        "url": "https://www.cellc.co.za",
+        "note": "Pacotes Connecta Flexi, comprados na loja. Bônus de madrugada.",
+        "plans": [
+          {
+            "gb": 6,
+            "bonus": 6,
+            "days": 30,
+            "price": 99,
+            "cur": "ZAR"
+          },
+          {
+            "gb": 10,
+            "bonus": 10,
+            "days": 30,
+            "price": 149,
+            "cur": "ZAR"
+          },
+          {
+            "gb": 25,
+            "bonus": 25,
+            "days": 30,
+            "price": 219,
+            "cur": "ZAR"
+          }
+        ]
+      },
+      {
+        "id": "airalo",
+        "kind": "esim",
+        "name": "Airalo",
+        "url": "https://www.airalo.com/pt-BR/south-africa-esim",
+        "note": "Só dados. Dá para recarregar pelo app.",
+        "plans": [
+          {
+            "gb": 3,
+            "days": 30,
+            "price": 11,
+            "cur": "USD"
+          },
+          {
+            "gb": 5,
+            "days": 30,
+            "price": 15.5,
+            "cur": "USD"
+          },
+          {
+            "gb": 10,
+            "days": 30,
+            "price": 26,
+            "cur": "USD"
+          }
+        ]
+      },
+      {
+        "id": "saily",
+        "kind": "esim",
+        "name": "Saily",
+        "url": "https://saily.com/esim-south-africa/",
+        "note": "Só dados.",
+        "plans": [
+          {
+            "gb": 20,
+            "days": 30,
+            "price": 35.99,
+            "cur": "USD"
+          }
+        ]
+      },
+      {
+        "id": "holafly",
+        "kind": "esim",
+        "name": "Holafly",
+        "url": "https://esim.holafly.com/esim-south-africa/",
+        "note": "Dados ilimitados, mas limita o compartilhamento (hotspot).",
+        "plans": [
+          {
+            "gb": null,
+            "days": 7,
+            "price": 39.5,
+            "cur": "USD"
+          },
+          {
+            "gb": null,
+            "days": 15,
+            "price": 63.5,
+            "cur": "USD"
+          },
+          {
+            "gb": null,
+            "days": 30,
+            "price": 111.9,
+            "cur": "USD"
+          }
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "label": "TechCabal (pacotes pré-pagos)",
+        "url": "https://techcabal.com/?p=166135"
+      },
+      {
+        "label": "Yesim (comparativo de eSIMs)",
+        "url": "https://blog.yesim.tech/best-esim-south-africa/"
+      },
+      {
+        "label": "Holafly",
+        "url": "https://esim.holafly.com/esim-south-africa/?currency=USD"
+      }
+    ]
+  }
 }

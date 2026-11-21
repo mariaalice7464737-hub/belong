@@ -268,48 +268,158 @@ function Weather() {
 }
 
 /* ---------- Internet ---------- */
+/** Quantos reais vale 1 unidade de cada moeda (cotação do dia; sem internet, só o rand). */
+function useBrlPer() {
+  const { guide } = useApp()
+  const [rates, setRates] = useState(rateCache.BRL?.rates || null)
+  useEffect(() => {
+    if (rateCache.BRL) return
+    fetch('https://open.er-api.com/v6/latest/BRL').then((r) => r.json()).then((j) => {
+      if (j?.rates) { rateCache.BRL = { rates: j.rates }; setRates(j.rates) }
+    }).catch(() => {})
+  }, [])
+  return (code) => (code === 'BRL' ? 1 : rates?.[code] ? 1 / rates[code] : code === 'ZAR' ? guide.currency.default_fx : null)
+}
+
+const planId = (prov, p) => `${prov}:${p.gb ?? 'ilim'}:${p.days}:${p.price}`
+const gbLabel = (p) => (p.gb == null ? 'Ilimitado' : `${String(p.gb).replace('.', ',')} GB`)
+const priceLabel = (p) => `${p.cur === 'USD' ? 'US$' : 'R'} ${String(p.price).replace('.', ',')}`
+
+function NetPlan({ prov, plan, selected, onPick, onRemove, brlPer }) {
+  const rate = brlPer(plan.cur)
+  return (
+    <li>
+      <button type="button" className={`net-plan ${selected ? 'is-on' : ''}`} onClick={onPick} aria-pressed={selected}>
+        <span className="net-radio" aria-hidden />
+        <span className="net-plan-main">
+          <strong>{gbLabel(plan)}{plan.bonus ? <small> + {String(plan.bonus).replace('.', ',')} GB madrugada</small> : null}</strong>
+          <small>{plan.days} dias{prov.custom ? ' · adicionado por você' : ''}</small>
+        </span>
+        <span className="net-plan-price">
+          <b>{priceLabel(plan)}</b>
+          {rate && plan.cur !== 'BRL' && <small>≈ R$ {Math.round(plan.price * rate)}</small>}
+        </span>
+      </button>
+      {onRemove && <button type="button" className="link-btn net-remove" onClick={onRemove}>Remover</button>}
+    </li>
+  )
+}
+
+function AddPlanForm({ kind, onAdd }) {
+  const [f, setF] = useState({ name: '', gb: '', days: '30', price: '', cur: kind === 'esim' ? 'USD' : 'ZAR' })
+  const up = (k) => (e) => setF({ ...f, [k]: e.target.value })
+  const ok = f.name.trim() && Number(f.price.replace(',', '.')) > 0
+  const submit = (e) => {
+    e.preventDefault()
+    if (!ok) return
+    onAdd({ name: f.name.trim(), kind, plan: { gb: f.gb ? Number(f.gb.replace(',', '.')) : null, days: Number(f.days) || 30, price: Number(f.price.replace(',', '.')), cur: f.cur } })
+    setF({ ...f, name: '', gb: '', price: '' })
+  }
+  return (
+    <form className="net-add" onSubmit={submit}>
+      <label className="field"><span className="field-label">Operadora / app</span><input value={f.name} onChange={up('name')} placeholder="Ex.: Telkom" /></label>
+      <label className="field"><span className="field-label">Dados (GB)</span><input inputMode="decimal" value={f.gb} onChange={up('gb')} placeholder="vazio = ilimitado" /></label>
+      <label className="field"><span className="field-label">Validade (dias)</span><input inputMode="numeric" value={f.days} onChange={up('days')} /></label>
+      <label className="field"><span className="field-label">Preço</span>
+        <span className="net-price-in">
+          <select value={f.cur} onChange={up('cur')} aria-label="Moeda"><option value="ZAR">R</option><option value="USD">US$</option><option value="BRL">R$</option></select>
+          <input inputMode="decimal" value={f.price} onChange={up('price')} placeholder="0" />
+        </span>
+      </label>
+      <button type="submit" className="btn btn-dark" disabled={!ok}>Adicionar opção</button>
+    </form>
+  )
+}
+
 function Internet() {
   const { guide, state, set } = useApp()
-  const net = guide.places.find((p) => p.id === 'internet')
-  const fx = guide.currency.default_fx
-  if (!net) return null
-  const sel = net.fields.find((f) => f.type === 'select')
+  const net = guide.internet
+  const brlPer = useBrlPer()
+  const [kind, setKind] = useState('chip')
+  const custom = Array.isArray(state['net.custom']) ? state['net.custom'] : []
+  const providers = [
+    ...net.providers,
+    ...Object.values(custom.reduce((acc, c, i) => {
+      const id = `custom-${c.kind}-${c.name.toLowerCase()}`
+      acc[id] ??= { id, kind: c.kind, name: c.name, custom: true, plans: [] }
+      acc[id].plans.push({ ...c.plan, _i: i })
+      return acc
+    }, {})),
+  ].filter((p) => p.kind === kind)
+  const [provId, setProvId] = useState(providers[0]?.id)
+  const prov = providers.find((p) => p.id === provId) || providers[0]
+  const chosen = state['net.plan'] // { id, provider, label, price, cur, kind }
+
+  const pick = (pv, p) => {
+    const id = planId(pv.id, p)
+    if (chosen?.id === id) { set('net.plan', null); return }
+    set('net.plan', { id, provider: pv.name, kind: pv.kind, label: `${gbLabel(p)} · ${p.days} dias`, price: p.price, cur: p.cur })
+    // Orçamento mensal: chip local em rand entra como custo do mês.
+    if (p.cur === 'ZAR') set('field.simchoice', String(p.price))
+  }
+  const addCustom = (c) => {
+    set('net.custom', [...custom, c])
+    setProvId(`custom-${c.kind}-${c.name.toLowerCase()}`)
+  }
+  const removeCustom = (i) => set('net.custom', custom.filter((_, k) => k !== i))
+  const changeKind = (k) => { setKind(k); setProvId(undefined) }
+  const chosenRate = chosen ? brlPer(chosen.cur) : null
+
   return (
     <>
-      <ol className="net-steps">
-        <li><b>Antes de embarcar</b><span>Instale um eSIM de dados (Airalo) para já chegar com internet.</span></li>
-        <li><b>Ao chegar</b><span>Compre um chip pré-pago da Vodacom (no aeroporto ou num shopping). Leve o passaporte e o endereço da residência: o chip precisa ser registrado (RICA).</span></li>
-        <li><b>No dia a dia</b><span>Recarregue pacotes de dados pelo app da operadora. Use o Wi-Fi da residência quando der.</span></li>
-      </ol>
+      {chosen && (
+        <div className="net-chosen">
+          <span className="mono-label">Seu plano</span>
+          <strong>{chosen.provider} · {chosen.label}</strong>
+          <span>{priceLabel(chosen)}{chosenRate && chosen.cur !== 'BRL' ? ` ≈ R$ ${Math.round(chosen.price * chosenRate)}` : ''}</span>
+        </div>
+      )}
 
-      <ul className="net-plans">
-        {net.prices.map((p) => (
-          <li key={p.label}>
-            <small>{p.label.split(' ')[0]}</small>
-            <strong>{p.label.replace(/^\S+\s/, '')}</strong>
-            <span className="mono">R{p.zar}{p.sub ? ` · ${p.sub}` : ''} <em>≈ R$ {Math.round(p.zar * fx)}</em></span>
-          </li>
+      <div className="net-kinds" role="tablist">
+        {net.kinds.map((k) => (
+          <button key={k.id} type="button" role="tab" aria-selected={kind === k.id} className={`mode ${kind === k.id ? 'is-active' : ''}`} onClick={() => changeKind(k.id)}>
+            {k.label}
+          </button>
         ))}
-      </ul>
+      </div>
+      <p className="muted net-hint">{net.kinds.find((k) => k.id === kind).hint}</p>
 
-      <div className="card net-card">
-        {sel && (
-          <label className="field">
-            <span className="field-label">{sel.label}</span>
-            <select className="net-select" value={state[sel.key] ?? ''} onChange={(e) => set(sel.key, e.target.value)}>
-              <option value="">Escolher…</option>
-              {sel.options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
-            </select>
-          </label>
-        )}
-        {net.checks.map((c) => <Check key={c.key} k={c.key} label={c.label} hint={c.hint} />)}
+      <div className="presets net-provs">
+        {providers.map((p) => (
+          <button key={p.id} type="button" className={`chip ${prov?.id === p.id ? 'is-active' : ''}`} onClick={() => setProvId(p.id)}>{p.name}</button>
+        ))}
+      </div>
+
+      {prov && (
+        <div className="card net-card">
+          <ul className="net-list">
+            {prov.plans.map((p) => (
+              <NetPlan key={planId(prov.id, p)} prov={prov} plan={p} brlPer={brlPer}
+                selected={chosen?.id === planId(prov.id, p)} onPick={() => pick(prov, p)}
+                onRemove={prov.custom ? () => removeCustom(p._i) : null} />
+            ))}
+          </ul>
+          {prov.note && <p className="fine">{prov.note}</p>}
+          {prov.url && <div className="row-links"><ExtLink href={prov.url}>Site da {prov.name}</ExtLink></div>}
+        </div>
+      )}
+
+      <details className="net-add-wrap">
+        <summary>Achou outra opção? Adicione aqui</summary>
+        <AddPlanForm key={kind} kind={kind} onAdd={addCustom} />
+      </details>
+
+      <div className="card net-card net-checks">
         <Check k="check.esim" label="eSIM instalado antes da viagem" hint="Ativa só ao chegar na África do Sul" />
         <Check k="check.rica" label="Chip local registrado (RICA)" hint="Passaporte + endereço da residência" />
-        <div className="row-links">
-          {net.links.map((l) => <ExtLink key={l.url} href={l.url}>{l.label}</ExtLink>)}
-        </div>
+        <Check k="check.wifi" label="Wi-Fi do quarto confirmado" hint="Velocidade e cobertura" />
       </div>
-      <p className="fine">{net.note} Valores em reais aproximados pela cotação salva.</p>
+
+      <p className="fine">
+        Preços pesquisados em {net.checked} e mudam com frequência: confira no site antes de comprar.
+        Valores em reais pela cotação do dia. Fontes:{' '}
+        {net.sources.map((s, i) => <span key={s.url}>{i > 0 && ' · '}<a href={s.url} target="_blank" rel="noopener noreferrer">{s.label}</a></span>)}
+      </p>
     </>
   )
 }
@@ -372,7 +482,7 @@ export default function Essentials() {
         </section>
 
         <section className="block" id="internet">
-          <SectionTitle kicker="03 · Internet" title="Sempre conectada.">Chip, eSIM e quanto custa.</SectionTitle>
+          <SectionTitle kicker="03 · Internet" title="Sempre conectada.">Compare chip local e eSIM, toque no plano que você escolheu.</SectionTitle>
           <Internet />
         </section>
 

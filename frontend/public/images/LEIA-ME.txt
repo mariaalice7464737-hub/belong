@@ -1,0 +1,6 @@
+Coloque aqui suas fotos (JPG) para personalizar o visual:
+
+  hero.jpg  -> foto de fundo da chamada "Travel to South Africa" na home
+               (de preferência vertical, céu claro em cima; ex.: Table Mountain, orla de Sea Point)
+
+Se o arquivo não existir, o site usa a ilustração padrão.

@@ -1,0 +1,1384 @@
+{
+  "trip": {
+    "title": "Cape Town",
+    "tagline": "life dossier.",
+    "period": "Dez 2026 — Fev 2027",
+    "country": "🇿🇦 África do Sul",
+    "neighborhood": "Green Point",
+    "base_name": "Cape Studies · Green Point",
+    "base_address": "17 Varneys Road, Green Point, Cape Town",
+    "airport": "Cape Town International Airport",
+    "intro": "Um lugar para guardar documentos, decisões, endereços, preços e todas as pequenas coisas que vão fazer Cape Town parecer casa."
+  },
+  "currency": {
+    "code": "ZAR",
+    "name": "rand sul-africano",
+    "pronunciation": "“rênd”",
+    "symbol": "R",
+    "default_fx": 0.3411,
+    "fx_date": "17/11/2026",
+    "note": "Edite a cotação sempre que quiser atualizar os preços. Valores reais variam por cartão, IOF e câmbio."
+  },
+  "emergency": {
+    "intro": "Para qualquer emergência grave, ligue 112 do celular ou para a central municipal 021 480 7700, que encaminha polícia, bombeiros ou ambulância.",
+    "contacts": [
+      {
+        "label": "Emergência geral · celular",
+        "number": "112",
+        "tel": "112",
+        "primary": true
+      },
+      {
+        "label": "Central de Cape Town · 24h",
+        "number": "021 480 7700",
+        "tel": "+27214807700",
+        "primary": true
+      },
+      {
+        "label": "Polícia nacional (SAPS)",
+        "number": "10111",
+        "tel": "10111"
+      },
+      {
+        "label": "Delegacia de Sea Point (SAPS)",
+        "number": "021 430 3700",
+        "tel": "+27214303700",
+        "note": "Bill Peters Drive c/ Bay Road, Green Point. Delegacia do bairro."
+      },
+      {
+        "label": "Ambulância / emergência médica",
+        "number": "10177",
+        "tel": "10177"
+      },
+      {
+        "label": "Bombeiros e resgate",
+        "number": "021 480 7700",
+        "tel": "+27214807700",
+        "note": "107 se estiver usando telefone fixo local."
+      },
+      {
+        "label": "Imigração · Home Affairs",
+        "number": "0800 60 11 90",
+        "tel": "0800601190",
+        "note": "Atendimento administrativo, não para emergências; pode funcionar só com linha local."
+      },
+      {
+        "label": "Imigração · e-mail",
+        "number": "hacc@dha.gov.za",
+        "email": "hacc@dha.gov.za"
+      },
+      {
+        "label": "Representação consular do Brasil",
+        "number": "021 421 4040",
+        "tel": "+27214214040",
+        "note": "Contato publicado por Cape Town Tourism; confirmar horários."
+      }
+    ],
+    "custom_fields": [
+      {
+        "key": "field.school-emergency",
+        "label": "Contato de emergência da Cape Studies",
+        "placeholder": "Adicionar quando a escola informar"
+      },
+      {
+        "key": "field.insurance-hotline",
+        "label": "Plantão da seguradora",
+        "placeholder": "Telefone 24h"
+      }
+    ],
+    "sources": [
+      {
+        "label": "City of Cape Town",
+        "url": "https://www.capetown.gov.za/general/contact-us/"
+      },
+      {
+        "label": "Western Cape",
+        "url": "https://www.westerncape.gov.za/health-wellness/know-who-you-can-call-emergency"
+      },
+      {
+        "label": "Home Affairs",
+        "url": "https://www.gov.za/department-home-affairs"
+      },
+      {
+        "label": "Cape Town Tourism",
+        "url": "https://www.capetown.travel/travelwise/emergency-contacts/"
+      },
+      {
+        "label": "Western Cape · delegacias",
+        "url": "https://westerncape.gov.za/facility/sea-point-police-station"
+      }
+    ]
+  },
+  "documents": [
+    {
+      "id": "passport",
+      "title": "Passaporte",
+      "description": "Válido e bem conservado; com duas páginas em branco.",
+      "default_done": true
+    },
+    {
+      "id": "id-card",
+      "title": "Identidade (RG ou CNH)",
+      "description": "Foto da frente e do verso. Leve uma cópia separada do passaporte."
+    },
+    {
+      "id": "yellow-fever",
+      "title": "Vacina de febre amarela",
+      "description": "Aplicação agendada para 19/11/2026. Guardar comprovante."
+    },
+    {
+      "id": "civp",
+      "title": "CIVP internacional",
+      "description": "Emitir o Certificado Internacional de Vacinação pela Anvisa."
+    },
+    {
+      "id": "insurance",
+      "title": "Seguro viagem",
+      "description": "Familiar responsável por organizar; confirmar hospitais particulares cobertos."
+    },
+    {
+      "id": "entry",
+      "title": "Entrada e permanência",
+      "description": "Conferir duração autorizada e carta da escola. Passagem de saída: volta em 15/02/2027."
+    },
+    {
+      "id": "enrollment",
+      "title": "Matrícula / carta da escola",
+      "description": "Guardar carta de aceitação, contrato e comprovantes."
+    },
+    {
+      "id": "housing",
+      "title": "Reserva e pagamento da residência",
+      "description": "Vaga informada como reservada; confirmar quarto individual, valor, recibo e regras."
+    },
+    {
+      "id": "transfer",
+      "title": "Transfer do aeroporto",
+      "description": "Confirmar se a escola fará a busca, horário e ponto de encontro."
+    },
+    {
+      "id": "meds",
+      "title": "Receitas e medicamentos",
+      "description": "Guardar prescrições e resumo médico em inglês; verificar regras de entrada."
+    },
+    {
+      "id": "tickets",
+      "title": "Passagens e contatos de emergência",
+      "description": "Ida LA 8060 (06/12, 23:20) e volta LA 8061 (15/02, 15:40). Anexar o PDF da LATAM e guardar contatos locais e do seguro."
+    }
+  ],
+  "places": [
+    {
+      "id": "school",
+      "category": "Inglês",
+      "icon": "📚",
+      "status": "Confirmado",
+      "status_tone": "ok",
+      "title": "Cape Studies",
+      "subtitle": "Escola de idiomas · 17 Varney's Road, Green Point",
+      "map_query": "Cape Studies 17 Varneys Road Green Point Cape Town",
+      "prices": [
+        {
+          "label": "Curso",
+          "zar": null,
+          "key": "price.school",
+          "brl_key": "price_brl.school"
+        }
+      ],
+      "fields": [
+        {
+          "key": "field.course",
+          "label": "Curso e horários",
+          "placeholder": "Nome do curso, dias e horários"
+        },
+        {
+          "key": "price.school",
+          "label": "Valor do curso em ZAR",
+          "type": "number",
+          "placeholder": "Ex.: 25000"
+        },
+        {
+          "key": "price_brl.school",
+          "label": "Ou valor em reais",
+          "type": "number",
+          "placeholder": "R$ ..."
+        }
+      ],
+      "links": [
+        {
+          "label": "capestudies.com",
+          "url": "https://www.capestudies.com"
+        }
+      ]
+    },
+    {
+      "id": "housing",
+      "category": "Meu quarto",
+      "icon": "🛏️",
+      "status": "Reservado · pagar",
+      "status_tone": "pending",
+      "title": "Residência estudantil",
+      "subtitle": "Dentro das instalações da Cape Studies",
+      "description": "Cozinha equipada, banheiro e espaços comuns compartilhados; existem quartos individuais e duplos.",
+      "room_photo": true,
+      "prices": [
+        {
+          "label": "Residência",
+          "zar": null,
+          "key": "price.housing",
+          "brl_key": "price_brl.housing"
+        }
+      ],
+      "fields": [
+        {
+          "key": "price.housing",
+          "label": "Valor da residência em ZAR",
+          "type": "number",
+          "placeholder": "A informar"
+        }
+      ],
+      "checks": [
+        {
+          "key": "check.private-room",
+          "label": "Confirmar quarto individual",
+          "hint": "Não dividir quarto com outro estudante"
+        },
+        {
+          "key": "check.paid-housing",
+          "label": "Confirmar pagamento e recibo",
+          "hint": "A escola informou que a vaga está reservada"
+        }
+      ],
+      "links": [
+        {
+          "label": "Fotos oficiais",
+          "url": "https://capestudies.com/accommodation/"
+        }
+      ],
+      "note": "A foto oficial de referência é de 2017; não presumimos qual quarto será atribuído."
+    },
+    {
+      "id": "gym",
+      "category": "Movimento",
+      "icon": "🏋️",
+      "status": "Matrícula pendente",
+      "status_tone": "pending",
+      "title": "Horizen Gym",
+      "subtitle": "Academia boutique de força · 126 Main Road, Sea Point",
+      "description": "Open Gym e aulas de treinamento.",
+      "pronunciation": "“HÓ-rai-zən dJIM” — algo como Hóráizen Djim (lembra “horizon”).",
+      "prices": [
+        {
+          "label": "Mensal",
+          "zar": 1195
+        },
+        {
+          "label": "3 meses",
+          "zar": 1195,
+          "factor": 3
+        }
+      ],
+      "links": [
+        {
+          "label": "Planos",
+          "url": "https://www.horizengym.com/membership-and-store"
+        },
+        {
+          "label": "A pé",
+          "route": {
+            "to": "Horizen Gym 126 Main Road Sea Point Cape Town",
+            "mode": "walking"
+          }
+        },
+        {
+          "label": "Uber / carro",
+          "route": {
+            "to": "Horizen Gym 126 Main Road Sea Point Cape Town",
+            "mode": "driving"
+          }
+        }
+      ],
+      "note": "Preço de referência do Open Gym publicado no site; confirmar condições e matrícula."
+    },
+    {
+      "id": "food",
+      "category": "Alimentação",
+      "icon": "🥗",
+      "status": "Testar primeiro",
+      "status_tone": "pending",
+      "title": "Fris Foods",
+      "subtitle": "Marmitas frescas entregues em caixas",
+      "description": "Opções High Performance, High Protein Low Carb e Healthy Homestyle. Confirmar entrega na residência.",
+      "prices": [
+        {
+          "label": "Caixa com 5",
+          "zar": 450,
+          "key": "price.meal"
+        },
+        {
+          "label": "20 refeições / mês",
+          "zar": 450,
+          "key": "price.meal",
+          "factor": 4
+        }
+      ],
+      "fields": [
+        {
+          "key": "price.meal",
+          "label": "Corrigir preço da caixa de 5 (ZAR)",
+          "type": "number",
+          "placeholder": "450"
+        },
+        {
+          "key": "field.mealnotes",
+          "label": "Meu cardápio / pedido",
+          "type": "textarea",
+          "placeholder": "Cole aqui o cardápio..."
+        }
+      ],
+      "links": [
+        {
+          "label": "Cardápio",
+          "url": "https://frisfoods.co.za/products/high-performance-box"
+        },
+        {
+          "label": "Entregas",
+          "url": "https://frisfoods.co.za/pages/fris-doorstep-boxes"
+        }
+      ],
+      "note": "R450 é referência anterior para 5 refeições High Performance de 300 g, não é preço atualizado. Porção e frete mudam o total."
+    },
+    {
+      "id": "health",
+      "category": "Saúde",
+      "icon": "🏥",
+      "status": "Conferir seguro",
+      "status_tone": "pending",
+      "wide": true,
+      "title": "Hospitais particulares e pronto-socorro",
+      "description": "Três opções de emergência hospitalar 24h. Em emergência grave ligue 112; não conte com Uber em risco de vida.",
+      "subitems": [
+        {
+          "title": "Netcare Christiaan Barnard Memorial",
+          "subtitle": "Foreshore · centro de trauma e emergência 24h",
+          "links": [
+            {
+              "label": "Rota",
+              "route": {
+                "to": "Netcare Christiaan Barnard Memorial Hospital Cape Town",
+                "mode": "driving"
+              }
+            },
+            {
+              "label": "Netcare",
+              "url": "https://www.netcare.co.za/"
+            }
+          ]
+        },
+        {
+          "title": "Mediclinic Cape Town",
+          "subtitle": "Gardens / Oranjezicht · pronto-socorro 24h",
+          "links": [
+            {
+              "label": "Rota",
+              "route": {
+                "to": "Mediclinic Cape Town 21 Hof Street Cape Town",
+                "mode": "driving"
+              }
+            },
+            {
+              "label": "Site",
+              "url": "https://www.mediclinic.co.za/en/cape-town/home.html"
+            }
+          ]
+        },
+        {
+          "title": "Mediclinic Milnerton",
+          "subtitle": "Milnerton · pronto-socorro 24h, mais distante",
+          "links": [
+            {
+              "label": "Rota",
+              "route": {
+                "to": "Mediclinic Milnerton Cape Town",
+                "mode": "driving"
+              }
+            },
+            {
+              "label": "Site",
+              "url": "https://www.mediclinic.co.za/en/milnerton/home.html"
+            }
+          ]
+        },
+        {
+          "title": "Consulta com clínico (GP)",
+          "subtitle": "MyFamilyGP, Sea Point · consulta particular padrão",
+          "prices": [
+            {
+              "label": "Consulta",
+              "zar": 915
+            }
+          ],
+          "links": [
+            {
+              "label": "Tarifas",
+              "url": "https://myfamily.gp/fees"
+            }
+          ]
+        }
+      ],
+      "prices_title": "Quanto custa uma emergência? (taxa de triagem)",
+      "prices": [
+        {
+          "label": "Verde",
+          "zar": 415,
+          "tone": "green"
+        },
+        {
+          "label": "Amarelo",
+          "zar": 1035,
+          "tone": "yellow"
+        },
+        {
+          "label": "Laranja",
+          "text": "Consultar",
+          "tone": "orange"
+        },
+        {
+          "label": "Vermelho",
+          "text": "Consultar",
+          "tone": "red"
+        }
+      ],
+      "links": [
+        {
+          "label": "Tarifas oficiais Mediclinic",
+          "url": "https://www.mediclinic.co.za/en/corporate/health-insurance/get-to-know-your-finances/tariff-information.html"
+        }
+      ],
+      "note": "Valores indicativos da tabela pública Mediclinic de 2025 — taxa de estrutura/triagem, não consulta completa. Médico, exames e remédios podem ser extras. Confirmar valores de 2026."
+    },
+    {
+      "id": "transfer",
+      "category": "Chegada",
+      "icon": "✈️",
+      "status": "Agendar",
+      "status_tone": "pending",
+      "title": "Transfer do aeroporto",
+      "subtitle": "Cape Town International → residência em Green Point",
+      "bullets": [
+        "Primeira opção: transfer da própria escola — possivelmente gratuito, sujeito à confirmação.",
+        "Plano B: Uber pelo aplicativo ou transporte privativo reservado."
+      ],
+      "prices": [
+        {
+          "label": "Transfer escola",
+          "text": "A confirmar"
+        },
+        {
+          "label": "Uber aprox.",
+          "zar_min": 280,
+          "zar_max": 400
+        }
+      ],
+      "checks": [
+        {
+          "key": "check.school-transfer",
+          "label": "Confirmar transfer com a escola",
+          "hint": "Informar voo, horário, ponto de encontro e contato"
+        }
+      ],
+      "links": [
+        {
+          "label": "Rota aeroporto → escola",
+          "route": {
+            "from": "Cape Town International Airport",
+            "mode": "driving"
+          }
+        }
+      ],
+      "note": "Uber: referência R280–R400, sem tarifa em tempo real."
+    },
+    {
+      "id": "internet",
+      "category": "Internet e telefone",
+      "icon": "📶",
+      "status": "Comparar e comprar",
+      "status_tone": "pending",
+      "title": "Vodacom + Airalo",
+      "description": "Airalo (eSIM de dados) instalado antes da viagem para chegar conectada; Vodacom (SIM pré-pago local) comprado ao chegar, com número sul-africano.",
+      "prices": [
+        {
+          "label": "Vodacom 20 GB / 30 dias",
+          "zar": 229
+        },
+        {
+          "label": "Vodacom 50 GB / 30 dias",
+          "zar": 349
+        },
+        {
+          "label": "Airalo 10 GB / 30 dias",
+          "zar": 373,
+          "sub": "US$22"
+        }
+      ],
+      "fields": [
+        {
+          "key": "field.simchoice",
+          "label": "Qual internet entra no orçamento mensal?",
+          "type": "select",
+          "options": [
+            {
+              "value": "229",
+              "label": "Vodacom 20 GB · R229"
+            },
+            {
+              "value": "349",
+              "label": "Vodacom 50 GB · R349"
+            },
+            {
+              "value": "0",
+              "label": "Não incluir / só eSIM de chegada"
+            }
+          ]
+        }
+      ],
+      "checks": [
+        {
+          "key": "check.wifi",
+          "label": "Confirmar Wi-Fi no quarto",
+          "hint": "Velocidade e cobertura"
+        }
+      ],
+      "links": [
+        {
+          "label": "Vodacom",
+          "url": "https://www.vodacom.co.za/vodacom/shopping/data/prepaid-data"
+        },
+        {
+          "label": "Airalo",
+          "url": "https://www.airalo.com/pt-BR/south-africa-esim"
+        }
+      ],
+      "note": "Bônus noturno da Vodacom não é internet livre durante o dia. SIM local exige registro RICA. Preços sujeitos a alteração."
+    },
+    {
+      "id": "laundry",
+      "category": "Lavanderia",
+      "icon": "🧺",
+      "status": "Confirmar tarifa",
+      "status_tone": "pending",
+      "title": "I Love My Laundry",
+      "subtitle": "Green Point · lavar, secar e dobrar",
+      "description": "Perguntar sobre coleta e entrega na residência; não é confirmado que seja a lavanderia indicada pela escola.",
+      "prices": [
+        {
+          "label": "5 kg",
+          "zar": 170
+        },
+        {
+          "label": "4 lavagens / mês",
+          "zar": 170,
+          "factor": 4
+        }
+      ],
+      "fields": [
+        {
+          "key": "field.laundryloads",
+          "label": "Lavagens de 5 kg por mês no orçamento",
+          "type": "select",
+          "options": [
+            {
+              "value": "0",
+              "label": "Não incluir ainda"
+            },
+            {
+              "value": "2",
+              "label": "2 lavagens"
+            },
+            {
+              "value": "4",
+              "label": "4 lavagens (semanal)"
+            },
+            {
+              "value": "6",
+              "label": "6 lavagens"
+            }
+          ]
+        }
+      ],
+      "links": [
+        {
+          "label": "Site",
+          "url": "https://ilovemylaundry.com/"
+        },
+        {
+          "label": "A pé",
+          "route": {
+            "to": "55 Main Road Green Point Cape Town",
+            "mode": "walking"
+          }
+        }
+      ],
+      "note": "Referência R170 por 5 kg, sem frete."
+    }
+  ],
+  "markets": [
+    {
+      "title": "Compras maiores",
+      "items": [
+        {
+          "name": "SPAR Cape Quarter",
+          "description": "27 Somerset Road, De Waterkant · compras semanais",
+          "to": "SPAR Cape Quarter Cape Town",
+          "modes": [
+            "walking",
+            "driving"
+          ]
+        },
+        {
+          "name": "Checkers Sea Point",
+          "description": "Supermercado grande, comparar marcas e promoções",
+          "to": "Checkers Sea Point Towers Cape Town",
+          "modes": [
+            "walking",
+            "driving"
+          ]
+        },
+        {
+          "name": "SPAR Sea Point",
+          "description": "Compra completa e variedade",
+          "to": "SPAR Sea Point Cape Town",
+          "modes": [
+            "walking"
+          ]
+        },
+        {
+          "name": "Checkers The Point",
+          "description": "The Point Mall, Sea Point · compras no shopping",
+          "to": "Checkers The Point Sea Point Cape Town",
+          "modes": [
+            "driving"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Mercadinhos e conveniência",
+      "items": [
+        {
+          "name": "KWIKSPAR Green Point",
+          "description": "122 Main Road · lanches, água, frutas e básicos",
+          "to": "122 Main Road Green Point Cape Town",
+          "modes": [
+            "walking"
+          ]
+        },
+        {
+          "name": "Woolworths Food Green Point",
+          "description": "Portside Shopping Centre · frescos e prontos",
+          "to": "Woolworths Food Portside Green Point Cape Town",
+          "modes": [
+            "walking"
+          ]
+        },
+        {
+          "name": "Giovanni’s Deliworld",
+          "description": "Deli, padaria e refeições para levar",
+          "to": "Giovannis Deliworld Green Point Cape Town",
+          "modes": [
+            "walking"
+          ]
+        },
+        {
+          "name": "Checkers Sixty60",
+          "description": "Delivery de compras · confirmar cobertura e custo",
+          "url": "https://www.checkers.co.za/sixty60"
+        }
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "name": "Horizen Sea Point",
+      "to": "Horizen Gym 126 Main Road Sea Point Cape Town"
+    },
+    {
+      "name": "Horizen Gardens",
+      "to": "Horizen 8 Vrede Street Gardens Cape Town"
+    },
+    {
+      "name": "Netcare Christiaan Barnard",
+      "to": "Netcare Christiaan Barnard Memorial Hospital Cape Town"
+    },
+    {
+      "name": "Mediclinic Cape Town",
+      "to": "Mediclinic Cape Town 21 Hof Street Cape Town"
+    },
+    {
+      "name": "Mediclinic Milnerton",
+      "to": "Mediclinic Milnerton Cape Town"
+    },
+    {
+      "name": "I Love My Laundry",
+      "to": "55 Main Road Green Point Cape Town"
+    },
+    {
+      "name": "SPAR Cape Quarter",
+      "to": "SPAR Cape Quarter Cape Town"
+    },
+    {
+      "name": "Checkers Sea Point",
+      "to": "Checkers Sea Point Towers Cape Town"
+    },
+    {
+      "name": "KWIKSPAR",
+      "to": "122 Main Road Green Point Cape Town"
+    },
+    {
+      "name": "Aeroporto → Cape Studies",
+      "from": "Cape Town International Airport"
+    }
+  ],
+  "budget": {
+    "months": 3,
+    "routine": [
+      {
+        "label": "Horizen Gym",
+        "zar": 1195
+      },
+      {
+        "label": "Marmitas Fris (4 caixas de 5)",
+        "zar": 450,
+        "price_key": "price.meal",
+        "factor": 4
+      },
+      {
+        "label": "Internet",
+        "select_key": "field.simchoice",
+        "default": 229
+      },
+      {
+        "label": "Lavanderia",
+        "zar": 170,
+        "factor_key": "field.laundryloads",
+        "default_factor": 0
+      }
+    ],
+    "monthly_brl": [
+      {
+        "key": "budget.market",
+        "label": "Supermercado"
+      },
+      {
+        "key": "budget.transport",
+        "label": "Transporte diário"
+      },
+      {
+        "key": "budget.fun",
+        "label": "Lazer"
+      }
+    ],
+    "one_off_brl": [
+      {
+        "key": "budget.other",
+        "label": "Seguro e outras despesas (total)"
+      }
+    ],
+    "fixed": [
+      {
+        "label": "Escola",
+        "zar_key": "price.school",
+        "brl_key": "price_brl.school"
+      },
+      {
+        "label": "Moradia",
+        "zar_key": "price.housing",
+        "brl_key": "price_brl.housing"
+      }
+    ]
+  },
+  "boarding_pass": {
+    "from_code": "GRU",
+    "from_city": "São Paulo",
+    "to_code": "CPT",
+    "to_city": "Cape Town",
+    "airline": "LATAM",
+    "fields": [
+      {
+        "key": "pass.from",
+        "label": "Origem (código)",
+        "placeholder": "GRU",
+        "default": "GRU",
+        "leg": "out"
+      },
+      {
+        "key": "pass.flight",
+        "label": "Voo",
+        "placeholder": "Ex.: LA 8060",
+        "default": "LA 8060",
+        "leg": "out"
+      },
+      {
+        "key": "pass.date",
+        "label": "Data",
+        "placeholder": "Ex.: 06 DEZ 26",
+        "default": "06 DEZ 26",
+        "leg": "out"
+      },
+      {
+        "key": "pass.depart",
+        "label": "Saída",
+        "placeholder": "Ex.: 23:20",
+        "default": "23:20",
+        "leg": "out"
+      },
+      {
+        "key": "pass.arrive",
+        "label": "Chegada",
+        "placeholder": "Ex.: 07 DEZ 12:40",
+        "default": "07 DEZ 12:40",
+        "leg": "out"
+      },
+      {
+        "key": "pass.seat",
+        "label": "Assento",
+        "placeholder": "Ex.: 23A",
+        "leg": "out"
+      },
+      {
+        "key": "pass.gate",
+        "label": "Portão",
+        "placeholder": "Ex.: B12",
+        "leg": "out"
+      },
+      {
+        "key": "pass.return_flight",
+        "label": "Voo",
+        "placeholder": "Ex.: LA 8061",
+        "default": "LA 8061",
+        "leg": "return"
+      },
+      {
+        "key": "pass.return_date",
+        "label": "Data",
+        "placeholder": "Ex.: 15 FEV 27",
+        "default": "15 FEV 27",
+        "leg": "return"
+      },
+      {
+        "key": "pass.return_depart",
+        "label": "Saída",
+        "placeholder": "Ex.: 15:40",
+        "default": "15:40",
+        "leg": "return"
+      },
+      {
+        "key": "pass.return_arrive",
+        "label": "Chegada",
+        "placeholder": "Ex.: 15 FEV 18:55",
+        "default": "15 FEV 18:55",
+        "leg": "return"
+      },
+      {
+        "key": "pass.return_seat",
+        "label": "Assento",
+        "placeholder": "Ex.: 23A",
+        "leg": "return"
+      },
+      {
+        "key": "pass.return_gate",
+        "label": "Portão",
+        "placeholder": "Ex.: A4",
+        "leg": "return"
+      }
+    ]
+  },
+  "doc_categories": [
+    {
+      "id": "passaporte",
+      "label": "Passaporte",
+      "icon": "passport",
+      "hint": "Foto da página de dados e do visto/carimbo de entrada.",
+      "checklist": [
+        "passport",
+        "entry"
+      ]
+    },
+    {
+      "id": "identidade",
+      "label": "Identidade",
+      "icon": "badge",
+      "hint": "RG ou CNH: frente e verso. Bom ter também o CPF.",
+      "checklist": [
+        "id-card"
+      ]
+    },
+    {
+      "id": "vacinas",
+      "label": "Vacinas",
+      "icon": "syringe",
+      "hint": "Comprovante da febre amarela e CIVP da Anvisa.",
+      "checklist": [
+        "yellow-fever",
+        "civp"
+      ]
+    },
+    {
+      "id": "aulas",
+      "label": "Comprovante das aulas",
+      "icon": "school",
+      "hint": "Carta de aceitação, contrato e recibos da Cape Studies.",
+      "checklist": [
+        "enrollment"
+      ]
+    },
+    {
+      "id": "moradia",
+      "label": "Comprovante de moradia",
+      "icon": "home",
+      "hint": "Reserva, recibo e regras da residência.",
+      "checklist": [
+        "housing"
+      ]
+    },
+    {
+      "id": "seguro",
+      "label": "Seguro viagem",
+      "icon": "shield",
+      "hint": "Apólice, carteirinha e telefone 24h.",
+      "checklist": [
+        "insurance"
+      ]
+    },
+    {
+      "id": "outros",
+      "label": "Outros documentos",
+      "icon": "folder",
+      "hint": "Passagens, receitas, transfer e o que mais precisar.",
+      "checklist": [
+        "transfer",
+        "meds",
+        "tickets"
+      ]
+    }
+  ],
+  "housing": {
+    "title": "Residência Cape Studies",
+    "subtitle": "",
+    "address": "17 Varneys Road, Green Point, Cape Town",
+    "map_query": "Cape Studies 17 Varneys Road Green Point Cape Town",
+    "links": [
+      {
+        "label": "Site da escola",
+        "url": "https://www.capestudies.com"
+      },
+      {
+        "label": "Fotos da moradia",
+        "url": "https://capestudies.com/accommodation/"
+      }
+    ]
+  },
+  "nearby": [
+    {
+      "id": "supermercado",
+      "label": "Supermercado",
+      "icon": "cart",
+      "search": "supermarket",
+      "items": [
+        {
+          "name": "KWIKSPAR Green Point",
+          "description": "122 Main Road · básicos, lanches e frutas",
+          "to": "122 Main Road Green Point Cape Town"
+        },
+        {
+          "name": "Woolworths Food Green Point",
+          "description": "Portside Shopping Centre · frescos e prontos",
+          "to": "Woolworths Food Portside Green Point Cape Town"
+        },
+        {
+          "name": "SPAR Cape Quarter",
+          "description": "27 Somerset Road, De Waterkant · compras semanais",
+          "to": "SPAR Cape Quarter Cape Town"
+        },
+        {
+          "name": "Checkers Sea Point",
+          "description": "Supermercado grande, compare preços",
+          "to": "Checkers Sea Point Towers Cape Town"
+        },
+        {
+          "name": "Giovanni’s Deliworld",
+          "description": "Deli, padaria e refeições para levar",
+          "to": "Giovannis Deliworld Green Point Cape Town"
+        }
+      ]
+    },
+    {
+      "id": "academia",
+      "label": "Academias",
+      "icon": "dumbbell",
+      "search": "gym",
+      "items": [
+        {
+          "name": "Horizen · Sea Point",
+          "description": "126 Main Road, Sea Point · boutique gym",
+          "to": "Horizen Gym 126 Main Road Sea Point Cape Town"
+        },
+        {
+          "name": "Horizen · Gardens",
+          "description": "8 Vrede Street, Gardens · segunda unidade",
+          "to": "Horizen 8 Vrede Street Gardens Cape Town"
+        }
+      ]
+    },
+    {
+      "id": "farmacia",
+      "label": "Farmácia",
+      "icon": "pill",
+      "search": "pharmacy",
+      "items": [
+        {
+          "name": "Dis-Chem The Point Centre",
+          "description": "76 Regent Road, Sea Point · farmácia e clínica",
+          "to": "Dis-Chem The Point Centre 76 Regent Road Sea Point Cape Town"
+        },
+        {
+          "name": "Dis-Chem Foreshore",
+          "description": "Centro (Foreshore) · farmácia e clínica",
+          "to": "Dis-Chem Foreshore Cape Town"
+        },
+        {
+          "name": "Clicks (rede)",
+          "description": "Rede de farmácias; veja a unidade mais próxima no mapa",
+          "to": "Clicks pharmacy Green Point Cape Town"
+        }
+      ]
+    },
+    {
+      "id": "hospital",
+      "label": "Hospitais",
+      "icon": "cross",
+      "search": "hospital emergency",
+      "items": [
+        {
+          "name": "Netcare Christiaan Barnard Memorial",
+          "description": "Foreshore · trauma e emergência 24h",
+          "to": "Netcare Christiaan Barnard Memorial Hospital Cape Town"
+        },
+        {
+          "name": "Mediclinic Cape Town",
+          "description": "21 Hof Street, Gardens · pronto-socorro 24h",
+          "to": "Mediclinic Cape Town 21 Hof Street Cape Town"
+        },
+        {
+          "name": "Mediclinic Milnerton",
+          "description": "Milnerton · pronto-socorro 24h, mais longe",
+          "to": "Mediclinic Milnerton Cape Town"
+        },
+        {
+          "name": "MyFamilyGP Sea Point",
+          "description": "Clínico geral (consulta ≈ R915)",
+          "to": "MyFamilyGP Sea Point Cape Town"
+        }
+      ]
+    },
+    {
+      "id": "policia",
+      "label": "Polícia",
+      "icon": "badge",
+      "search": "police station",
+      "items": [
+        {
+          "name": "Delegacia de Sea Point (SAPS)",
+          "description": "Bill Peters Drive c/ Bay Road, Green Point",
+          "to": "Sea Point Police Station Bill Peters Drive Green Point Cape Town",
+          "tel": "+27214303700",
+          "phone": "021 430 3700"
+        },
+        {
+          "name": "Delegacia Cape Town Central (SAPS)",
+          "description": "Buitenkant c/ Albertus Street, centro",
+          "to": "Cape Town Central Police Station Buitenkant Street",
+          "tel": "+27214678078",
+          "phone": "021 467 8078"
+        }
+      ]
+    },
+    {
+      "id": "restaurante",
+      "label": "Restaurantes",
+      "icon": "fork",
+      "search": "restaurants",
+      "items": [
+        {
+          "name": "Jason Bakery Green Point",
+          "description": "Somerset Road, Green Point · padaria e brunch (fila no fim de semana)",
+          "to": "Jason Bakery Green Point Cape Town"
+        },
+        {
+          "name": "Café Chiffon",
+          "description": "72 De Waterkant Street · doces e confeitaria",
+          "to": "Cafe Chiffon 72 De Waterkant Street Cape Town"
+        },
+        {
+          "name": "Kleinsky’s",
+          "description": "Sea Point · deli de bagels e brunch",
+          "to": "Kleinskys Delicatessen Sea Point Cape Town"
+        },
+        {
+          "name": "Butter",
+          "description": "176 Main Road, Sea Point · café e almoço (fecha segunda)",
+          "to": "Butter 176 Main Road Sea Point Cape Town"
+        },
+        {
+          "name": "La Mouette",
+          "description": "78 Regent Road, Sea Point · menu degustação francês, preço justo",
+          "to": "La Mouette 78 Regent Road Sea Point Cape Town"
+        }
+      ]
+    },
+    {
+      "id": "bar",
+      "label": "Bares",
+      "icon": "glass",
+      "search": "bars",
+      "items": [
+        {
+          "name": "The Orphanage Cocktail Emporium",
+          "description": "227 Bree Street · coquetéis",
+          "to": "The Orphanage Cocktail Emporium 227 Bree Street Cape Town"
+        },
+        {
+          "name": "The Perseverance Tavern",
+          "description": "92 Bree Street · pub tradicional",
+          "to": "The Perseverance Tavern 92 Bree Street Cape Town"
+        },
+        {
+          "name": "The Waiting Room",
+          "description": "273 Long Street · bar com terraço",
+          "to": "The Waiting Room 273 Long Street Cape Town"
+        }
+      ]
+    },
+    {
+      "id": "balada",
+      "label": "Baladas",
+      "icon": "music",
+      "search": "night clubs",
+      "items": [
+        {
+          "name": "Long Street",
+          "description": "A rua das baladas e bares do centro. À noite, vá e volte de Uber.",
+          "to": "Long Street Cape Town"
+        },
+        {
+          "name": "Drama Bar",
+          "description": "259 Long Street · amapiano e afrobeats, qui a dom",
+          "to": "Drama Bar 259 Long Street Cape Town"
+        },
+        {
+          "name": "Saint Champagne Bar & Lounge",
+          "description": "Centro · balada mais chique (e cara), DJs até tarde",
+          "to": "Saint Champagne Bar Lounge Cape Town"
+        }
+      ]
+    }
+  ],
+  "route_presets": [
+    {
+      "label": "Horizen Sea Point",
+      "to": "Horizen Gym 126 Main Road Sea Point Cape Town"
+    },
+    {
+      "label": "Horizen Gardens",
+      "to": "Horizen 8 Vrede Street Gardens Cape Town"
+    },
+    {
+      "label": "Netcare (hospital)",
+      "to": "Netcare Christiaan Barnard Memorial Hospital Cape Town"
+    },
+    {
+      "label": "Mediclinic",
+      "to": "Mediclinic Cape Town 21 Hof Street Cape Town"
+    },
+    {
+      "label": "Lavanderia",
+      "to": "55 Main Road Green Point Cape Town"
+    },
+    {
+      "label": "SPAR Cape Quarter",
+      "to": "SPAR Cape Quarter Cape Town"
+    },
+    {
+      "label": "Aeroporto",
+      "to": "Cape Town International Airport"
+    }
+  ],
+  "destinations": {
+    "home": {
+      "name": "Cape Town",
+      "lat": -33.92,
+      "lon": 18.42
+    },
+    "route": [
+      {
+        "name": "Cape Town",
+        "lat": -33.92,
+        "lon": 18.42,
+        "label": "top",
+        "province": "ZA-WC"
+      },
+      {
+        "name": "Hermanus",
+        "lat": -34.42,
+        "lon": 19.24,
+        "note": "Observação de baleias (melhor de jun a nov).",
+        "label": "bottom",
+        "province": "ZA-WC"
+      },
+      {
+        "name": "Garden Route",
+        "lat": -34.04,
+        "lon": 23.05,
+        "note": "Estrada costeira; base em Knysna.",
+        "label": "top",
+        "province": "ZA-WC"
+      },
+      {
+        "name": "Gqeberha",
+        "lat": -33.96,
+        "lon": 25.6,
+        "note": "Antiga Port Elizabeth; praias e safáris próximos.",
+        "label": "bottom",
+        "province": "ZA-EC"
+      },
+      {
+        "name": "Durban",
+        "lat": -29.86,
+        "lon": 31.03,
+        "note": "Praias quentes do Índico.",
+        "label": "right",
+        "province": "ZA-NL"
+      },
+      {
+        "name": "Drakensberg",
+        "lat": -29.0,
+        "lon": 29.4,
+        "note": "Montanhas e trilhas.",
+        "label": "top",
+        "province": "ZA-NL"
+      },
+      {
+        "name": "Joanesburgo",
+        "lat": -26.2,
+        "lon": 28.05,
+        "note": "Maior cidade; museus e conexões aéreas.",
+        "label": "left",
+        "province": "ZA-GT"
+      },
+      {
+        "name": "Kruger",
+        "lat": -24.99,
+        "lon": 31.59,
+        "note": "Parque Nacional Kruger: safári dos Big Five.",
+        "label": "top",
+        "province": "ZA-MP"
+      }
+    ]
+  },
+  "provinces": [
+    {
+      "id": "ZA-WC",
+      "name": "Cabo Ocidental",
+      "capital": "Cidade do Cabo",
+      "label_at": [
+        20.4,
+        -32.7
+      ],
+      "note": "A sua província: Cape Town, as vinícolas de Stellenbosch e Franschhoek, Hermanus e o começo da Garden Route."
+    },
+    {
+      "id": "ZA-EC",
+      "name": "Cabo Oriental",
+      "capital": "Bhisho",
+      "label_at": [
+        26.2,
+        -32.1
+      ],
+      "note": "Gqeberha, as ondas de Jeffreys Bay e safáris sem malária, como o Addo Elephant Park."
+    },
+    {
+      "id": "ZA-NC",
+      "name": "Cabo Setentrional",
+      "capital": "Kimberley",
+      "label_at": [
+        21.2,
+        -29.0
+      ],
+      "note": "A maior e mais vazia: deserto do Kalahari e as flores de Namaqualand (agosto e setembro)."
+    },
+    {
+      "id": "ZA-FS",
+      "name": "Estado Livre",
+      "capital": "Bloemfontein",
+      "label_at": [
+        26.3,
+        -28.9
+      ],
+      "note": "Planalto agrícola no centro do país. Bloemfontein é a capital judiciária."
+    },
+    {
+      "id": "ZA-NL",
+      "name": "KwaZulu-Natal",
+      "capital": "Pietermaritzburg",
+      "label_at": [
+        31.3,
+        -27.7
+      ],
+      "note": "Durban, as praias quentes do Índico e as montanhas do Drakensberg."
+    },
+    {
+      "id": "ZA-GT",
+      "name": "Gauteng",
+      "capital": "Joanesburgo",
+      "label_at": [
+        28.35,
+        -26.34
+      ],
+      "anchor": "start",
+      "small": true,
+      "note": "A menor e a mais populosa: Joanesburgo e Pretória."
+    },
+    {
+      "id": "ZA-LP",
+      "name": "Limpopo",
+      "capital": "Polokwane",
+      "label_at": [
+        28.9,
+        -23.5
+      ],
+      "note": "Extremo norte, com savana e a parte norte do Kruger."
+    },
+    {
+      "id": "ZA-MP",
+      "name": "Mpumalanga",
+      "capital": "Mbombela",
+      "label_at": [
+        31.1,
+        -24.83
+      ],
+      "note": "Porta de entrada do Kruger e da Panorama Route (Blyde River Canyon).",
+      "anchor": "end",
+      "small": true
+    },
+    {
+      "id": "ZA-NW",
+      "name": "Noroeste",
+      "capital": "Mahikeng",
+      "label_at": [
+        24.9,
+        -26.95
+      ],
+      "note": "Sun City e o Pilanesberg, um safári perto de Joanesburgo."
+    }
+  ]
+}

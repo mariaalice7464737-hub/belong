@@ -26,52 +26,61 @@
         "label": "Emergência geral · celular",
         "number": "112",
         "tel": "112",
-        "primary": true
+        "primary": true,
+        "short": "Emergência (celular)"
       },
       {
         "label": "Central de Cape Town · 24h",
         "number": "021 480 7700",
         "tel": "+27214807700",
-        "primary": true
+        "primary": true,
+        "short": "Central Cape Town 24h"
       },
       {
         "label": "Polícia nacional (SAPS)",
         "number": "10111",
-        "tel": "10111"
+        "tel": "10111",
+        "short": "Polícia"
       },
       {
         "label": "Delegacia de Sea Point (SAPS)",
         "number": "021 430 3700",
         "tel": "+27214303700",
-        "note": "Bill Peters Drive c/ Bay Road, Green Point. Delegacia do bairro."
+        "note": "Bill Peters Drive c/ Bay Road, Green Point. Delegacia do bairro.",
+        "short": "Delegacia do bairro"
       },
       {
         "label": "Ambulância / emergência médica",
         "number": "10177",
-        "tel": "10177"
+        "tel": "10177",
+        "short": "Ambulância"
       },
       {
         "label": "Bombeiros e resgate",
         "number": "021 480 7700",
         "tel": "+27214807700",
-        "note": "107 se estiver usando telefone fixo local."
+        "note": "107 se estiver usando telefone fixo local.",
+        "short": "Bombeiros"
       },
       {
         "label": "Imigração · Home Affairs",
         "number": "0800 60 11 90",
         "tel": "0800601190",
-        "note": "Atendimento administrativo, não para emergências; pode funcionar só com linha local."
+        "note": "Atendimento administrativo, não para emergências; pode funcionar só com linha local.",
+        "short": "Imigração"
       },
       {
         "label": "Imigração · e-mail",
         "number": "hacc@dha.gov.za",
-        "email": "hacc@dha.gov.za"
+        "email": "hacc@dha.gov.za",
+        "short": "Imigração (e-mail)"
       },
       {
         "label": "Representação consular do Brasil",
         "number": "021 421 4040",
         "tel": "+27214214040",
-        "note": "Contato publicado por Cape Town Tourism; confirmar horários."
+        "note": "Contato publicado por Cape Town Tourism; confirmar horários.",
+        "short": "Consulado do Brasil"
       }
     ],
     "custom_fields": [

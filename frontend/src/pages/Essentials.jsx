@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useApp } from '../AppContext'
 import Icon from '../components/Icon'
-import { Field, Kicker, SectionTitle, Sheet } from '../components/ui'
+import { Check, ExtLink, Field, Kicker, SectionTitle, Sheet } from '../components/ui'
 
 const CPT_TZ = 'Africa/Johannesburg'
 const SP_TZ = 'America/Sao_Paulo'
@@ -267,6 +267,53 @@ function Weather() {
   )
 }
 
+/* ---------- Internet ---------- */
+function Internet() {
+  const { guide, state, set } = useApp()
+  const net = guide.places.find((p) => p.id === 'internet')
+  const fx = guide.currency.default_fx
+  if (!net) return null
+  const sel = net.fields.find((f) => f.type === 'select')
+  return (
+    <>
+      <ol className="net-steps">
+        <li><b>Antes de embarcar</b><span>Instale um eSIM de dados (Airalo) para já chegar com internet.</span></li>
+        <li><b>Ao chegar</b><span>Compre um chip pré-pago da Vodacom (no aeroporto ou num shopping). Leve o passaporte e o endereço da residência: o chip precisa ser registrado (RICA).</span></li>
+        <li><b>No dia a dia</b><span>Recarregue pacotes de dados pelo app da operadora. Use o Wi-Fi da residência quando der.</span></li>
+      </ol>
+
+      <ul className="net-plans">
+        {net.prices.map((p) => (
+          <li key={p.label}>
+            <small>{p.label.split(' ')[0]}</small>
+            <strong>{p.label.replace(/^\S+\s/, '')}</strong>
+            <span className="mono">R{p.zar}{p.sub ? ` · ${p.sub}` : ''} <em>≈ R$ {Math.round(p.zar * fx)}</em></span>
+          </li>
+        ))}
+      </ul>
+
+      <div className="card net-card">
+        {sel && (
+          <label className="field">
+            <span className="field-label">{sel.label}</span>
+            <select className="net-select" value={state[sel.key] ?? ''} onChange={(e) => set(sel.key, e.target.value)}>
+              <option value="">Escolher…</option>
+              {sel.options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+            </select>
+          </label>
+        )}
+        {net.checks.map((c) => <Check key={c.key} k={c.key} label={c.label} hint={c.hint} />)}
+        <Check k="check.esim" label="eSIM instalado antes da viagem" hint="Ativa só ao chegar na África do Sul" />
+        <Check k="check.rica" label="Chip local registrado (RICA)" hint="Passaporte + endereço da residência" />
+        <div className="row-links">
+          {net.links.map((l) => <ExtLink key={l.url} href={l.url}>{l.label}</ExtLink>)}
+        </div>
+      </div>
+      <p className="fine">{net.note} Valores em reais aproximados pela cotação salva.</p>
+    </>
+  )
+}
+
 /* ---------- Números importantes ---------- */
 function Emergency() {
   const { guide } = useApp()
@@ -308,7 +355,7 @@ export default function Essentials() {
       </section>
 
       <nav className="jump">
-        <a href="#cambio">Câmbio</a><a href="#clima">Clima</a><a href="#sos">Emergência</a>
+        <a href="#cambio">Câmbio</a><a href="#clima">Clima</a><a href="#internet">Internet</a><a href="#sos">Emergência</a>
       </nav>
 
       <div className="page-body">
@@ -324,8 +371,13 @@ export default function Essentials() {
           <Weather />
         </section>
 
+        <section className="block" id="internet">
+          <SectionTitle kicker="03 · Internet" title="Sempre conectada.">Chip, eSIM e quanto custa.</SectionTitle>
+          <Internet />
+        </section>
+
         <section className="block" id="sos">
-          <SectionTitle kicker="03 · Números importantes" title="Salve no celular.">{guide.emergency.intro}</SectionTitle>
+          <SectionTitle kicker="04 · Números importantes" title="Salve no celular.">{guide.emergency.intro}</SectionTitle>
           <Emergency />
         </section>
       </div>

@@ -30,9 +30,8 @@ function HeroArt() {
 const CHAPTERS = [
   { n: '01', title: 'O mapa', sub: 'Províncias, moradia, rotas, lugares perto e favoritos', to: '/mapa', icon: 'map' },
   { n: '02', title: 'Documentos', sub: 'Passaporte, vacinas e comprovantes', to: '/documentos', icon: 'passport' },
-  { n: '03', title: 'Essenciais', sub: 'Câmbio, clima, horário e números de emergência', to: '/essenciais', icon: 'clock' },
-  { n: '04', title: 'Vida em Cape Town', sub: 'Escola, academia, comida, internet', soon: true, icon: 'home' },
-  { n: '05', title: 'Orçamento', sub: 'Quanto custa cada mês', soon: true, icon: 'grid' },
+  { n: '03', title: 'Essenciais', sub: 'Câmbio, clima, horário, internet e números de emergência', to: '/essenciais', icon: 'clock' },
+  { n: '04', title: 'Orçamento', sub: 'Quanto custa cada mês', soon: true, icon: 'grid' },
 ]
 
 export default function Home() {

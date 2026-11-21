@@ -71,35 +71,24 @@ function LivePanel() {
   const doRefresh = () => { refresh(); refreshRates('ZAR') }
 
   return (
-    <div className="live-panel">
-      <div className="live-cells">
-        <button type="button" className="live-cell" onClick={() => w && setOpen('weather')} disabled={!w}
-          aria-label={c ? `Clima: ${Math.round(c.temperature_2m)} graus, ${wmo(c.weather_code)[0]}. Ver a semana` : 'Clima'}>
-          <span className="live-label">Clima</span>
-          <span className="live-main">
-            {c ? <WeatherIcon code={c.weather_code} isDay={c.is_day} size={26} /> : null}
-            <b>{c ? `${Math.round(c.temperature_2m)}°C` : '—'}</b>
-          </span>
-          <small>{c ? wmo(c.weather_code)[0] : failed ? 'Indisponível' : 'Carregando…'}</small>
-        </button>
-        <button type="button" className="live-cell" onClick={() => setOpen('time')} aria-label="Ver horários de Cape Town e São Paulo">
-          <span className="live-label">Cape Town</span>
-          <span className="live-main"><b>{fmtTime(now, CPT_TZ)}</b></span>
-          <small>SP {fmtTime(now, SP_TZ)}</small>
-        </button>
-        <button type="button" className="live-cell" onClick={() => setOpen('fx')} aria-label="Abrir o conversor de moedas">
-          <span className="live-label">Câmbio</span>
-          <span className="live-main"><b>R$ {fx.rate ? fx.rate.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '—'}</b></span>
-          <small>por R 1</small>
-        </button>
-      </div>
-      <div className="live-foot">
+    <div className="live-panel" aria-label="Agora em Cape Town">
+      <button type="button" className="live-cell" onClick={() => w && setOpen('weather')} disabled={!w}
+        aria-label={c ? `Clima: ${Math.round(c.temperature_2m)} graus, ${wmo(c.weather_code)[0]}. Ver a semana` : 'Clima indisponível'}
+        title={c ? wmo(c.weather_code)[0] : undefined}>
+        {c && <WeatherIcon code={c.weather_code} isDay={c.is_day} size={16} />}
+        <b>{c ? `${Math.round(c.temperature_2m)}°` : '—'}</b>
+      </button>
+      <button type="button" className="live-cell" onClick={() => setOpen('time')} aria-label={`Cape Town ${fmtTime(now, CPT_TZ)}, São Paulo ${fmtTime(now, SP_TZ)}. Ver horários`}>
+        <b>{fmtTime(now, CPT_TZ)}</b><small>CPT</small>
+      </button>
+      <button type="button" className="live-cell" onClick={() => setOpen('fx')} aria-label="Abrir o conversor de moedas">
+        <b>R$ {fx.rate ? fx.rate.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '—'}</b>
+      </button>
+      <button type="button" className={`live-refresh ${loading ? 'is-spinning' : ''}`} onClick={doRefresh}
+        title={offline ? 'Sem conexão · dados salvos' : `Atualizado ${agoLabel(updated, now)}`}
+        aria-label={`${offline ? 'Sem conexão, usando dados salvos' : `Ao vivo, atualizado ${agoLabel(updated, now)}`}. Atualizar`}>
         <span className={`live-dot ${offline ? 'is-off' : ''}`} aria-hidden />
-        <span>{offline ? 'Sem conexão · usando dados salvos' : `Ao vivo · atualizado ${agoLabel(updated, now)}`}</span>
-        <button type="button" className={`live-refresh ${loading ? 'is-spinning' : ''}`} onClick={doRefresh} aria-label="Atualizar clima e câmbio">
-          <Icon name="refresh" size={14} />
-        </button>
-      </div>
+      </button>
       <WeatherSheet glass w={w} open={open === 'weather'} onClose={() => setOpen(null)} />
       {open === 'time' && createPortal(
         <Sheet glass open onClose={() => setOpen(null)} kicker="Fuso horário" title="Agora">
@@ -130,20 +119,16 @@ export default function Home() {
         <HeroArt />
         <div className="hero-photo" />
         <div className="hero-shade" />
-        <div className="hero-head">
-          <span className="hero-kicker">Your city</span>
-          <h1 className="hero-city">Cape Town</h1>
-          <p className="hero-sub">Explore your new home</p>
-        </div>
+        <LivePanel />
+        <h1 className="hero-title">
+          <span className="ht-line">Travel</span>
+          <span className="ht-script">to</span>
+          <span className="ht-line ht-small">South Africa</span>
+        </h1>
         <div className="hero-corners hero-bottom">
           <span>Find<br />your<br />place</span>
           <span className="ta-right hero-cta">Chapter one:<br />the map <Icon name="arrow" size={16} /></span>
         </div>
-      </section>
-
-      {/* Faixa ao vivo, entre a capa e a passagem */}
-      <section className="live-band" aria-label="Agora em Cape Town">
-        <LivePanel />
       </section>
 
       {/* 2. Cartão de embarque → documentos */}

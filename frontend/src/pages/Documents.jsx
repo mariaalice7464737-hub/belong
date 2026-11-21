@@ -63,7 +63,7 @@ function CategorySheet({ category, onClose }) {
       <div className="sheet-group">
         <div className="group-head">
           <span className="mono-label">Anexos · {list.length}</span>
-          {list.length > 1 && (
+          {list.length > 1 && api.categoryZipUrl && (
             <a className="link-btn" href={api.categoryZipUrl(category.id)} download>Baixar todos (.zip)</a>
           )}
         </div>
@@ -198,9 +198,12 @@ function BackupButtons() {
   return (
     <>
       <div className="row-links">
-        <a className="btn btn-dark" href={api.backupUrl}>Exportar backup (.zip)</a>
+        <a className="btn btn-dark" href={api.backupUrl}
+          onClick={api.exportBackup ? (e) => { e.preventDefault(); api.exportBackup() } : undefined}>
+          Exportar backup
+        </a>
         <button className="btn btn-ghost" onClick={() => ref.current.click()}>Importar backup</button>
-        <input ref={ref} type="file" accept=".zip,application/zip" hidden onChange={onImport} />
+        <input ref={ref} type="file" accept=".zip,application/zip,.json,application/json" hidden onChange={onImport} />
       </div>
       {msg && <p className="fine">{msg}</p>}
     </>

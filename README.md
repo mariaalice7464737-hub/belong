@@ -2,6 +2,15 @@
 
 Diário de viagem do intercâmbio em Cape Town. Backend em **Python (FastAPI + SQLite)** e frontend em **React (Vite)**, pensado primeiro para o celular.
 
+## Versão online (GitHub Pages)
+
+A cada push na `main`, o GitHub publica o site em **https://mariaalice7464737-hub.github.io/belong/**
+(workflow em `.github/workflows/pages.yml`; ative em Settings → Pages → Source: GitHub Actions).
+
+Essa versão roda sem o backend Python: o que você preenche e anexa fica salvo **no navegador**
+de cada aparelho (localStorage + IndexedDB), não no servidor nem no GitHub. Para levar os dados
+de um aparelho para outro, use **Exportar backup** e **Importar backup** em Documentos.
+
 ## Rodar
 
 - **Windows:** extraia o zip e dê dois cliques em `start.bat`. Deixe as duas janelas pretas abertas; o navegador abre em http://localhost:5173

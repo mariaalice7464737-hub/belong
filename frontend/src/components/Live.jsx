@@ -131,20 +131,22 @@ const shortDay = (d, i) => (i === 0 ? 'Hoje' : new Date(d + 'T12:00').toLocaleDa
 const longDay = (d, i) => (i === 0 ? 'Hoje' : i === 1 ? 'Amanhã' : new Date(d + 'T12:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'short' }).replace('.', ''))
 
 /** Clima da semana + hora a hora do dia escolhido. */
-export function WeatherSheet({ w, open, startDay = 0, onClose }) {
+export function WeatherSheet({ w, open, startDay = 0, onClose, glass = false }) {
   const [day, setDay] = useState(startDay)
   useEffect(() => { if (open) setDay(startDay) }, [open, startDay])
   if (!open || !w) return null
   const d = w.daily
   const date = d.time[day]
   const nowIso = w.current.time.slice(0, 13)
-  const hours = w.hourly.time.map((t, i) => ({ t, i })).filter(({ t }) => t.startsWith(date) && (day > 0 || t.slice(0, 13) >= nowIso))
+  const allDay = w.hourly.time.map((t, i) => ({ t, i })).filter(({ t }) => t.startsWith(date))
+  const upcoming = allDay.filter(({ t }) => day > 0 || t.slice(0, 13) >= nowIso)
+  const hours = upcoming.length ? upcoming : allDay
   const temps = hours.map(({ i }) => w.hourly.temperature_2m[i])
   const lo = Math.min(...temps), hi = Math.max(...temps)
 
   // Portal: abre por cima de tudo, mesmo quando chamado de dentro da capa da Home.
   return createPortal(
-    <Sheet open onClose={onClose} kicker="Clima em Cape Town" title={longDay(date, day)}>
+    <Sheet open glass={glass} onClose={onClose} kicker="Clima em Cape Town" title={longDay(date, day)}>
       <ul className="week" role="tablist" aria-label="Dias da semana">
         {d.time.map((t, i) => (
           <li key={t}>
@@ -170,7 +172,7 @@ export function WeatherSheet({ w, open, startDay = 0, onClose }) {
         {hours.map(({ t, i }, k) => {
           const temp = w.hourly.temperature_2m[i]
           const pct = hi > lo ? ((temp - lo) / (hi - lo)) * 100 : 50
-          const isNow = day === 0 && k === 0
+          const isNow = day === 0 && k === 0 && hours === upcoming
           return (
             <li key={t} className={isNow ? 'is-now' : ''}>
               <span className="h-time">{isNow ? 'Agora' : hourOf(t)}</span>

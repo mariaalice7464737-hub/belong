@@ -47,7 +47,7 @@ export function SectionTitle({ kicker, title, children, light }) {
 }
 
 /** Painel que sobe de baixo no celular (modal centrado no desktop). */
-export function Sheet({ open, onClose, title, kicker, children }) {
+export function Sheet({ open, onClose, title, kicker, children, glass = false }) {
   useEffect(() => {
     if (!open) return
     const onKey = (e) => e.key === 'Escape' && onClose()
@@ -57,8 +57,8 @@ export function Sheet({ open, onClose, title, kicker, children }) {
   }, [open, onClose])
   if (!open) return null
   return (
-    <div className="sheet-backdrop" onClick={onClose}>
-      <div className="sheet" role="dialog" aria-modal="true" aria-label={title} onClick={(e) => e.stopPropagation()}>
+    <div className={`sheet-backdrop ${glass ? 'is-glass' : ''}`} onClick={onClose}>
+      <div className={`sheet ${glass ? 'is-glass' : ''}`} role="dialog" aria-modal="true" aria-label={title} onClick={(e) => e.stopPropagation()}>
         <div className="sheet-grip" />
         <header className="sheet-head">
           <div>

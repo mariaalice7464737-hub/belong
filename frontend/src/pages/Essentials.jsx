@@ -5,7 +5,7 @@ import { Check, ExtLink, Field, Kicker, SectionTitle } from '../components/ui'
 import { CPT_TZ, SP_TZ, WeatherIcon, WeatherSheet, fmtDay, fmtSec, fmtTime, hoursAhead, rateCache, useNow, useRate, useWeather, wmo } from '../components/Live'
 
 /* ---------- Relógios ---------- */
-function Clocks() {
+export function Clocks() {
   const now = useNow(1000)
   const diff = hoursAhead(now)
   const hSp = Number(new Intl.DateTimeFormat('en-US', { timeZone: SP_TZ, hour: 'numeric', hourCycle: 'h23' }).format(now))
@@ -58,7 +58,7 @@ function CurrencySelect({ value, onChange, label }) {
   )
 }
 
-function Converter() {
+export function Converter() {
   const { guide, state, set } = useApp()
   const from = state['fx.from'] || 'ZAR'
   const to = state['fx.to'] || 'BRL'

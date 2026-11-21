@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { Route, Routes, useLocation } from 'react-router-dom'
 import { useApp } from './AppContext'
-import { BottomNav, TopBar } from './components/Chrome'
+import { BottomNav, SideNav, TopBar } from './components/Chrome'
 import Documents from './pages/Documents'
 import Essentials from './pages/Essentials'
 import Home from './pages/Home'
@@ -48,6 +48,7 @@ export default function App() {
         <Route path="/essenciais" element={<Essentials />} />
         <Route path="*" element={<Home />} />
       </Routes>
+      <SideNav />
       <BottomNav />
     </>
   )

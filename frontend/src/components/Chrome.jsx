@@ -16,13 +16,28 @@ export function TopBar() {
         : <Link to="/" className="icon-btn" aria-label="Voltar para o início"><Icon name="back" /></Link>}
       {!isHome && <span className="topbar-title">{TITLES[pathname]}</span>}
       <span className={`save-dot is-${saveStatus}`} title={saveStatus === 'saved' ? 'Salvo' : ''} />
-      <nav className="topbar-links">
-        <NavLink to="/" end>Início</NavLink>
-        <NavLink to="/mapa">Mapa</NavLink>
-        <NavLink to="/documentos">Documentos</NavLink>
-        <NavLink to="/essenciais">Essenciais</NavLink>
-      </nav>
     </header>
+  )
+}
+
+const NAV = [
+  { to: '/', label: 'Início', icon: 'compass', end: true },
+  { to: '/mapa', label: 'Mapa', icon: 'map' },
+  { to: '/documentos', label: 'Docs', icon: 'passport' },
+  { to: '/essenciais', label: 'Essenciais', icon: 'clock' },
+]
+
+/** Menu lateral flutuante (tablet e computador). */
+export function SideNav() {
+  return (
+    <nav className="sidenav" aria-label="Navegação">
+      {NAV.map((n) => (
+        <NavLink key={n.to} to={n.to} end={n.end}>
+          <Icon name={n.icon} size={20} />
+          <span>{n.label}</span>
+        </NavLink>
+      ))}
+    </nav>
   )
 }
 

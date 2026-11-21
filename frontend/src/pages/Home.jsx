@@ -1,9 +1,11 @@
 import { useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Link } from 'react-router-dom'
 import { useApp } from '../AppContext'
 import { PassCarousel } from '../components/BoardingPass'
 import Icon from '../components/Icon'
-import { Kicker } from '../components/ui'
+import { Kicker, Sheet } from '../components/ui'
+import { Clocks, Converter } from './Essentials'
 import { CPT_TZ, SP_TZ, WeatherIcon, WeatherSheet, fmtTime, refreshRates, useNow, useRate, useWeather, wmo } from '../components/Live'
 
 /**
@@ -62,7 +64,7 @@ function LivePanel() {
   const { w, failed, loading, refresh } = useWeather()
   const now = useNow(1000)
   const fx = useRate('ZAR', 'BRL', { rate: guide.currency.default_fx, date: guide.currency.fx_date })
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(null) // 'weather' | 'time' | 'fx'
   const c = w?.current
   const updated = Math.min(...[w?.fetchedAt, fx.fetchedAt].filter(Boolean)) || null
   const offline = failed || !fx.live
@@ -71,7 +73,7 @@ function LivePanel() {
   return (
     <div className="live-panel">
       <div className="live-cells">
-        <button type="button" className="live-cell" onClick={() => w && setOpen(true)} disabled={!w}
+        <button type="button" className="live-cell" onClick={() => w && setOpen('weather')} disabled={!w}
           aria-label={c ? `Clima: ${Math.round(c.temperature_2m)} graus, ${wmo(c.weather_code)[0]}. Ver a semana` : 'Clima'}>
           <span className="live-label">Clima</span>
           <span className="live-main">
@@ -80,16 +82,16 @@ function LivePanel() {
           </span>
           <small>{c ? wmo(c.weather_code)[0] : failed ? 'Indisponível' : 'Carregando…'}</small>
         </button>
-        <Link to="/essenciais" className="live-cell" aria-label="Horário em Cape Town e São Paulo">
+        <button type="button" className="live-cell" onClick={() => setOpen('time')} aria-label="Ver horários de Cape Town e São Paulo">
           <span className="live-label">Cape Town</span>
           <span className="live-main"><b>{fmtTime(now, CPT_TZ)}</b></span>
           <small>SP {fmtTime(now, SP_TZ)}</small>
-        </Link>
-        <Link to="/essenciais" className="live-cell" aria-label="Cotação do rand em reais">
+        </button>
+        <button type="button" className="live-cell" onClick={() => setOpen('fx')} aria-label="Abrir o conversor de moedas">
           <span className="live-label">Câmbio</span>
           <span className="live-main"><b>R$ {fx.rate ? fx.rate.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '—'}</b></span>
           <small>por R 1</small>
-        </Link>
+        </button>
       </div>
       <div className="live-foot">
         <span className={`live-dot ${offline ? 'is-off' : ''}`} aria-hidden />
@@ -98,7 +100,16 @@ function LivePanel() {
           <Icon name="refresh" size={14} />
         </button>
       </div>
-      <WeatherSheet w={w} open={open} onClose={() => setOpen(false)} />
+      <WeatherSheet glass w={w} open={open === 'weather'} onClose={() => setOpen(null)} />
+      {open === 'time' && createPortal(
+        <Sheet glass open onClose={() => setOpen(null)} kicker="Fuso horário" title="Agora">
+          <Clocks />
+          <p className="fine">Cape Town fica 5 horas à frente de Brasília. Bom horário para ligar para o Brasil: entre 13h e 3h de Cape Town (8h às 22h no Brasil).</p>
+        </Sheet>, document.body)}
+      {open === 'fx' && createPortal(
+        <Sheet glass open onClose={() => setOpen(null)} kicker="Câmbio" title="Conversor">
+          <Converter />
+        </Sheet>, document.body)}
     </div>
   )
 }
@@ -123,12 +134,16 @@ export default function Home() {
           <span className="hero-kicker">Your city</span>
           <h1 className="hero-city">Cape Town</h1>
           <p className="hero-sub">Explore your new home</p>
-          <LivePanel />
         </div>
         <div className="hero-corners hero-bottom">
           <span>Find<br />your<br />place</span>
           <span className="ta-right hero-cta">Chapter one:<br />the map <Icon name="arrow" size={16} /></span>
         </div>
+      </section>
+
+      {/* Faixa ao vivo, entre a capa e a passagem */}
+      <section className="live-band" aria-label="Agora em Cape Town">
+        <LivePanel />
       </section>
 
       {/* 2. Cartão de embarque → documentos */}

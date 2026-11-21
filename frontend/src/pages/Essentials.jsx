@@ -1,38 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useApp } from '../AppContext'
 import Icon from '../components/Icon'
-import { Check, ExtLink, Field, Kicker, SectionTitle, Sheet } from '../components/ui'
-
-const CPT_TZ = 'Africa/Johannesburg'
-const SP_TZ = 'America/Sao_Paulo'
+import { Check, ExtLink, Field, Kicker, SectionTitle } from '../components/ui'
+import { CPT_TZ, SP_TZ, WeatherIcon, WeatherSheet, fmtDay, fmtSec, fmtTime, hoursAhead, rateCache, useNow, useRate, useWeather, wmo } from '../components/Live'
 
 /* ---------- Relógios ---------- */
-function useNow(ms = 1000) {
-  const [now, setNow] = useState(() => new Date())
-  useEffect(() => {
-    const t = setInterval(() => setNow(new Date()), ms)
-    return () => clearInterval(t)
-  }, [ms])
-  return now
-}
-
-const fmtTime = (d, tz) => d.toLocaleTimeString('pt-BR', { timeZone: tz, hour: '2-digit', minute: '2-digit' })
-const fmtSec = (d, tz) => d.toLocaleTimeString('pt-BR', { timeZone: tz, second: '2-digit' }).padStart(2, '0')
-const fmtDay = (d, tz) => d.toLocaleDateString('pt-BR', { timeZone: tz, weekday: 'short', day: '2-digit', month: 'short' }).replace(/\./g, '')
-
-/** Minutos de diferença do fuso em relação ao UTC (funciona em qualquer navegador, inclusive Safari). */
-function tzOffsetMin(d, tz) {
-  const parts = Object.fromEntries(
-    new Intl.DateTimeFormat('en-US', { timeZone: tz, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })
-      .formatToParts(d).map((p) => [p.type, p.value]),
-  )
-  const asUtc = Date.UTC(+parts.year, +parts.month - 1, +parts.day, +parts.hour, +parts.minute)
-  return Math.round((asUtc - Math.floor(d.getTime() / 60000) * 60000) / 60000)
-}
-
 function Clocks() {
   const now = useNow(1000)
-  const diff = Math.round((tzOffsetMin(now, CPT_TZ) - tzOffsetMin(now, SP_TZ)) / 60)
+  const diff = hoursAhead(now)
   const hSp = Number(new Intl.DateTimeFormat('en-US', { timeZone: SP_TZ, hour: 'numeric', hourCycle: 'h23' }).format(now))
   const callOk = hSp >= 8 && hSp < 22
   const Clock = ({ label, tz, right }) => (
@@ -66,33 +41,6 @@ const CURRENCIES = [
   { code: 'MZN', symbol: 'MT', name: 'Metical (Moçambique)' },
 ]
 const cur = (code) => CURRENCIES.find((c) => c.code === code) || CURRENCIES[0]
-const rateCache = {}
-
-/** Cotação do dia de uma moeda para outra (open.er-api.com, sem chave). */
-function useRate(from, to, fallback) {
-  const [live, setLive] = useState(rateCache[from] || null)
-  useEffect(() => {
-    let alive = true
-    if (rateCache[from]) { setLive(rateCache[from]); return }
-    setLive(null)
-    fetch(`https://open.er-api.com/v6/latest/${from}`)
-      .then((r) => r.json())
-      .then((j) => {
-        if (!alive || !j?.rates) return
-        rateCache[from] = { rates: j.rates, date: new Date(j.time_last_update_unix * 1000).toLocaleDateString('pt-BR') }
-        setLive(rateCache[from])
-      })
-      .catch(() => {})
-    return () => { alive = false }
-  }, [from])
-  if (from === to) return { rate: 1, source: 'mesma moeda' }
-  if (live?.rates?.[to]) return { rate: live.rates[to], source: `cotação do dia · ${live.date}` }
-  // Sem internet: só sabemos rand ↔ real (cotação salva no guide.json).
-  if (from === 'ZAR' && to === 'BRL') return { rate: fallback.rate, source: `cotação salva · ${fallback.date} (sem internet)` }
-  if (from === 'BRL' && to === 'ZAR') return { rate: 1 / fallback.rate, source: `cotação salva · ${fallback.date} (sem internet)` }
-  return { rate: null, source: 'sem internet para buscar essa cotação' }
-}
-
 const fmtMoney = (n) => (Number.isFinite(n) ? n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '')
 const parseMoney = (s) => Number(String(s).replace(/\./g, '').replace(',', '.'))
 
@@ -163,85 +111,24 @@ function Converter() {
   )
 }
 
-/* ---------- Clima (Open-Meteo, sem chave) ---------- */
-const WMO = {
-  0: ['Céu limpo', '☀️'], 1: ['Quase limpo', '🌤️'], 2: ['Parcialmente nublado', '⛅'], 3: ['Nublado', '☁️'],
-  45: ['Neblina', '🌫️'], 48: ['Neblina', '🌫️'], 51: ['Garoa', '🌦️'], 53: ['Garoa', '🌦️'], 55: ['Garoa forte', '🌦️'],
-  61: ['Chuva fraca', '🌧️'], 63: ['Chuva', '🌧️'], 65: ['Chuva forte', '🌧️'], 80: ['Pancadas', '🌦️'],
-  81: ['Pancadas', '🌧️'], 82: ['Pancadas fortes', '⛈️'], 95: ['Trovoadas', '⛈️'],
-}
-const wmo = (c) => WMO[c] || ['—', '🌡️']
-
-const hourOf = (iso) => iso.slice(11, 13) + 'h'
-const dayName = (d, i) => (i === 0 ? 'Hoje' : i === 1 ? 'Amanhã' : new Date(d + 'T12:00').toLocaleDateString('pt-BR', { weekday: 'long' }))
-
-/** Previsão hora a hora de um dia (abre ao tocar no clima). */
-function DaySheet({ w, dayIdx, onClose }) {
-  if (dayIdx == null) return null
-  const date = w.daily.time[dayIdx]
-  const nowIso = w.current.time.slice(0, 13)
-  const hours = w.hourly.time.map((t, i) => ({ t, i })).filter(({ t }) => t.startsWith(date) && (dayIdx > 0 || t.slice(0, 13) >= nowIso))
-  const temps = hours.map(({ i }) => w.hourly.temperature_2m[i])
-  const lo = Math.min(...temps), hi = Math.max(...temps)
-  const [label] = wmo(w.daily.weather_code[dayIdx])
-  return (
-    <Sheet open onClose={onClose} kicker="Cape Town · hora a hora" title={dayName(date, dayIdx)}>
-      <div className="day-summary">
-        <span>{label}</span>
-        <span>{Math.round(w.daily.temperature_2m_min[dayIdx])}° / {Math.round(w.daily.temperature_2m_max[dayIdx])}°</span>
-        <span>UV {Math.round(w.daily.uv_index_max[dayIdx])}</span>
-        <span>☀ {w.daily.sunrise[dayIdx].slice(11)} · ☾ {w.daily.sunset[dayIdx].slice(11)}</span>
-      </div>
-      <ul className="hourly">
-        {hours.map(({ t, i }, k) => {
-          const temp = w.hourly.temperature_2m[i]
-          const pct = hi > lo ? ((temp - lo) / (hi - lo)) * 100 : 50
-          return (
-            <li key={t} className={dayIdx === 0 && k === 0 ? 'is-now' : ''}>
-              <span className="h-time">{dayIdx === 0 && k === 0 ? 'Agora' : hourOf(t)}</span>
-              <span className="h-icon" aria-hidden>{w.hourly.is_day?.[i] === 0 && w.hourly.weather_code[i] <= 2 ? '🌙' : wmo(w.hourly.weather_code[i])[1]}</span>
-              <span className="h-bar"><i style={{ left: `${pct}%` }} /></span>
-              <b className="h-temp">{Math.round(temp)}°</b>
-              <span className="h-rain">{w.hourly.precipitation_probability[i] ?? 0}%</span>
-              <span className="h-wind">{Math.round(w.hourly.wind_speed_10m[i])} km/h</span>
-            </li>
-          )
-        })}
-      </ul>
-      <p className="fine">Colunas: hora, tempo, temperatura, chance de chuva e vento. Previsão: Open-Meteo.</p>
-    </Sheet>
-  )
-}
-
+/* ---------- Clima ---------- */
 function Weather() {
-  const { guide } = useApp()
-  const { lat, lon } = guide.destinations.home
-  const [w, setW] = useState(null)
-  const [failed, setFailed] = useState(false)
+  const { w, failed } = useWeather()
   const [openDay, setOpenDay] = useState(null)
-
-  useEffect(() => {
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
-      '&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m' +
-      '&hourly=temperature_2m,weather_code,precipitation_probability,wind_speed_10m,is_day' +
-      '&daily=weather_code,temperature_2m_max,temperature_2m_min,uv_index_max,sunrise,sunset&forecast_days=5&timezone=Africa%2FJohannesburg'
-    fetch(url).then((r) => r.json()).then(setW).catch(() => setFailed(true))
-  }, [lat, lon])
 
   if (failed) return <div className="card weather"><p className="muted">Não consegui carregar o clima agora (sem internet?). Tente de novo mais tarde.</p></div>
   if (!w?.current) return <div className="card weather"><p className="muted">Carregando o clima…</p></div>
 
   const c = w.current
-  const [label, emoji] = wmo(c.weather_code)
   const wind = Math.round(c.wind_speed_10m)
   const uv = Math.round(w.daily.uv_index_max[0])
   return (
     <div className="card weather">
       <button type="button" className="weather-now" onClick={() => setOpenDay(0)} aria-label="Ver o tempo de hoje hora a hora">
-        <span className="weather-emoji" aria-hidden>{emoji}</span>
+        <WeatherIcon code={c.weather_code} isDay={c.is_day} size={56} />
         <span className="weather-now-text">
           <strong>{Math.round(c.temperature_2m)}°</strong>
-          <small>{label} · sensação {Math.round(c.apparent_temperature)}°</small>
+          <small>{wmo(c.weather_code)[0]} · sensação {Math.round(c.apparent_temperature)}°</small>
         </span>
         <span className="weather-more">Hora a hora <Icon name="arrow" size={14} /></span>
       </button>
@@ -250,11 +137,11 @@ function Weather() {
         <div><dt>UV hoje</dt><dd>{uv}{uv >= 8 ? ' · protetor!' : ''}</dd></div>
       </dl>
       <ul className="forecast">
-        {w.daily.time.map((d, i) => (
+        {w.daily.time.slice(0, 5).map((d, i) => (
           <li key={d}>
-            <button type="button" onClick={() => setOpenDay(i)} aria-label={`Ver ${dayName(d, i)} hora a hora`}>
+            <button type="button" onClick={() => setOpenDay(i)}>
               <small>{i === 0 ? 'Hoje' : new Date(d + 'T12:00').toLocaleDateString('pt-BR', { weekday: 'short' }).replace('.', '')}</small>
-              <span aria-hidden>{wmo(w.daily.weather_code[i])[1]}</span>
+              <WeatherIcon code={w.daily.weather_code[i]} size={26} />
               <b>{Math.round(w.daily.temperature_2m_max[i])}°</b>
               <small>{Math.round(w.daily.temperature_2m_min[i])}°</small>
             </button>
@@ -262,7 +149,7 @@ function Weather() {
         ))}
       </ul>
       <p className="fine">Toque num dia para ver hora a hora. Cape Town venta muito no verão (o “Cape Doctor”).</p>
-      <DaySheet w={w} dayIdx={openDay} onClose={() => setOpenDay(null)} />
+      <WeatherSheet w={w} open={openDay != null} startDay={openDay ?? 0} onClose={() => setOpenDay(null)} />
     </div>
   )
 }

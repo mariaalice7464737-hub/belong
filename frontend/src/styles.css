@@ -145,7 +145,6 @@ em { font-family: var(--script); font-style: italic; font-weight: 400; }
   font: 400 11px/1.25 var(--sans); letter-spacing: .06em; text-transform: uppercase;
   text-shadow: 0 1px 8px rgba(0, 0, 0, .15);
 }
-.hero-top { top: calc(var(--top-h) + 10px); grid-template-columns: repeat(4, 1fr); }
 .hero-bottom { bottom: calc(var(--bottom-h) + var(--safe-b) + 22px); grid-template-columns: 1fr 1fr; align-items: end; }
 .hero-cta { display: inline-flex; flex-direction: column; align-items: flex-end; gap: 6px; }
 .hero-title {
@@ -431,6 +430,7 @@ a.ch:active { background: var(--paper-2); }
 .check-text small { display: block; color: var(--muted); font-size: 13.5px; line-height: 1.4; }
 
 /* ---------- Painel (sheet) e visualizador ---------- */
+.sheet { color: var(--ink); }
 .sheet-backdrop { position: fixed; inset: 0; z-index: 60; background: rgba(8, 20, 28, .55); display: flex; align-items: flex-end; animation: fade .2s ease; }
 .sheet {
   width: 100%; max-height: 90svh; overflow-y: auto; overscroll-behavior: contain;
@@ -684,3 +684,51 @@ a.ch:active { background: var(--paper-2); }
 .net-price-in input { flex: 1; min-width: 0; }
 .net-add .btn:disabled { opacity: .4; }
 .net-checks { margin-top: 12px; }
+
+/* ---- Home: faixa ao vivo (clima, horário, câmbio) ---- */
+.hero-link { position: absolute; inset: 0; z-index: 0; }
+.hero-title, .hero-corners { pointer-events: none; z-index: 1; }
+.hero-live {
+  position: absolute; z-index: 2; left: 16px; right: 16px; top: calc(var(--top-h) + 10px);
+  display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); grid-template-rows: auto auto; gap: 8px;
+  max-width: 560px;
+}
+.live-pill {
+  display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 16px;
+  color: var(--white); text-decoration: none; font: inherit; text-align: left; cursor: pointer;
+  background: rgba(11, 30, 45, .28); border: 1px solid rgba(255, 255, 255, .28);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+}
+.live-pill:hover { background: rgba(11, 30, 45, .4); }
+.live-pill:focus-visible { outline: 2px solid var(--white); outline-offset: 2px; }
+.live-pill small { display: block; font: 500 10.5px/1.2 var(--mono); letter-spacing: .06em; text-transform: uppercase; opacity: .8; }
+.live-pill b, .live-pill strong { font-variant-numeric: tabular-nums; }
+.live-weather { grid-row: span 2; }
+.live-weather strong { display: block; font: 400 26px/1.05 var(--sans); }
+.live-weather small { text-transform: none; letter-spacing: 0; font: 400 13px/1.25 var(--sans); }
+.live-weather:disabled { cursor: default; }
+.live-time { justify-content: space-between; gap: 12px; padding-block: 7px; }
+.live-time span { display: grid; }
+.live-time b { font: 500 17px/1.1 var(--sans); }
+.live-fx { justify-content: space-between; gap: 6px; padding-block: 7px; }
+.live-fx b { font: 500 15px var(--sans); white-space: nowrap; }
+
+/* Desenhos do tempo */
+.wicon { flex: none; overflow: visible; }
+.wi-sun circle { fill: #ffc94d; }
+.wi-sun line { stroke: #ffc94d; stroke-width: 2; stroke-linecap: round; }
+.wi-moon { fill: #e8c766; }
+.hero-live .wi-moon { fill: #f3e7c4; }
+.wi-cloud { fill: #f4f7f9; stroke: rgba(19, 33, 43, .12); stroke-width: .6; }
+.wi-cloud.is-dark { fill: #b9c6cf; }
+.wi-rain line { stroke: #5aa0d6; stroke-width: 2; stroke-linecap: round; }
+.wi-fog line { stroke: #c9d3da; stroke-width: 2.2; stroke-linecap: round; }
+.wi-bolt { fill: #ffc94d; }
+.week { list-style: none; margin: 12px -4px 4px; padding: 0; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.week button { display: grid; justify-items: center; gap: 2px; width: 100%; padding: 8px 2px; border-radius: 12px; border: 1px solid transparent;
+  background: none; cursor: pointer; font: inherit; color: var(--ink); }
+.week button.is-on { background: var(--card); border-color: var(--line); box-shadow: 0 2px 8px rgba(11, 30, 45, .08); }
+.week small { font: 400 11.5px var(--mono); color: var(--muted); text-transform: capitalize; }
+.week b { font-weight: 500; }
+.h-icon { display: grid; place-items: center; }
+.forecast button { justify-items: center; }

@@ -1,8 +1,10 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useApp } from '../AppContext'
 import { PassCarousel } from '../components/BoardingPass'
 import Icon from '../components/Icon'
 import { Kicker } from '../components/ui'
+import { CPT_TZ, SP_TZ, WeatherIcon, WeatherSheet, fmtTime, useNow, useRate, useWeather, wmo } from '../components/Live'
 
 /** Paisagem de Cape Town ao entardecer (usada se não houver foto em public/images/hero.jpg). */
 function HeroArt() {
@@ -27,6 +29,42 @@ function HeroArt() {
   )
 }
 
+/** Faixa do topo: clima, horários e câmbio, ao vivo. */
+function HeroLive() {
+  const { guide } = useApp()
+  const { w, failed } = useWeather()
+  const now = useNow(1000)
+  const fx = useRate('ZAR', 'BRL', { rate: guide.currency.default_fx, date: guide.currency.fx_date })
+  const [open, setOpen] = useState(false)
+  const c = w?.current
+  return (
+    <div className="hero-live">
+      <button type="button" className="live-pill live-weather" onClick={() => w && setOpen(true)} disabled={!w}
+        aria-label={c ? `Clima em Cape Town: ${Math.round(c.temperature_2m)} graus, ${wmo(c.weather_code)[0]}. Ver a semana` : 'Clima em Cape Town'}>
+        {c ? (
+          <>
+            <WeatherIcon code={c.weather_code} isDay={c.is_day} size={40} />
+            <span>
+              <strong>{Math.round(c.temperature_2m)}°C</strong>
+              <small>{wmo(c.weather_code)[0]}</small>
+            </span>
+          </>
+        ) : (
+          <span><strong>—°C</strong><small>{failed ? 'Clima indisponível' : 'Carregando clima…'}</small></span>
+        )}
+      </button>
+      <Link to="/essenciais" className="live-pill live-time" aria-label="Horário em Cape Town e São Paulo">
+        <span><small>CPT</small><b>{fmtTime(now, CPT_TZ)}</b></span>
+        <span><small>SP</small><b>{fmtTime(now, SP_TZ)}</b></span>
+      </Link>
+      <Link to="/essenciais" className="live-pill live-fx" aria-label="Cotação do rand">
+        <small>R 1 =</small><b>R$ {fx.rate ? fx.rate.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '—'}</b>
+      </Link>
+      <WeatherSheet w={w} open={open} onClose={() => setOpen(false)} />
+    </div>
+  )
+}
+
 const CHAPTERS = [
   { n: '01', title: 'O mapa', sub: 'Províncias, moradia, rotas, lugares perto e favoritos', to: '/mapa', icon: 'map' },
   { n: '02', title: 'Documentos', sub: 'Passaporte, vacinas e comprovantes', to: '/documentos', icon: 'passport' },
@@ -35,22 +73,15 @@ const CHAPTERS = [
 ]
 
 export default function Home() {
-  const { guide } = useApp()
-  const { trip } = guide
-
   return (
     <main className="home">
       {/* 1. Chamada principal → mapa */}
-      <Link to="/mapa" className="hero" aria-label="Abrir o mapa da viagem">
+      <section className="hero">
+        <Link to="/mapa" className="hero-link" aria-label="Abrir o mapa da viagem" />
         <HeroArt />
         <div className="hero-photo" />
         <div className="hero-shade" />
-        <div className="hero-corners hero-top">
-          <span>Summer<br />edit</span>
-          <span>Travel<br />diary</span>
-          <span>{trip.period.split('—')[0].trim()}<br />{(trip.period.split('—')[1] || '').trim()}</span>
-          <span className="ta-right">Endless<br />summer</span>
-        </div>
+        <HeroLive />
         <h1 className="hero-title">
           <span className="ht-line">Travel</span>
           <span className="ht-script">to</span>
@@ -60,7 +91,7 @@ export default function Home() {
           <span>Between<br />now<br />and<br />summer</span>
           <span className="ta-right hero-cta">Chapter one:<br />the map <Icon name="arrow" size={16} /></span>
         </div>
-      </Link>
+      </section>
 
       {/* 2. Cartão de embarque → documentos */}
       <section className="boarding">

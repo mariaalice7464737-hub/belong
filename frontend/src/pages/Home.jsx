@@ -6,6 +6,8 @@ import { PassCarousel } from '../components/BoardingPass'
 import Icon from '../components/Icon'
 import { Kicker, Sheet } from '../components/ui'
 import { Clocks, Converter } from './Essentials'
+import { RegionMap } from './MapPage'
+import { api } from '../api'
 import { CPT_TZ, SP_TZ, WeatherIcon, WeatherSheet, fmtDay, fmtTime, refreshRates, useNow, useRate, useWeather, wmo } from '../components/Live'
 
 /**
@@ -150,79 +152,70 @@ function LivePanel() {
   )
 }
 
-/* ---------- Perto de você: acesso rápido ao mapa ---------- */
-const distKm = (a, b) => {
-  const R = 6371, rad = (x) => (x * Math.PI) / 180
-  const dLat = rad(b.lat - a.lat), dLon = rad(b.lon - a.lon)
-  const h = Math.sin(dLat / 2) ** 2 + Math.cos(rad(a.lat)) * Math.cos(rad(b.lat)) * Math.sin(dLon / 2) ** 2
-  return 2 * R * Math.asin(Math.sqrt(h))
-}
-
-function NearbyCard() {
-  const { guide } = useApp()
+/* ---------- Documentos: acesso rápido aos anexos da página Documentos ---------- */
+function DocsCard() {
+  const { guide, files } = useApp()
   const navigate = useNavigate()
-  const home = guide.destinations.home
-  const cats = (guide.home_nearby || []).map((id) => guide.nearby.find((c) => c.id === id)).filter(Boolean)
-  const [loc, setLoc] = useState(null) // { lat, lon }
-  const [status, setStatus] = useState('idle') // idle | asking | ok | denied | unsupported
+  const cats = guide.doc_categories
+  const docs = files.filter((f) => f.kind === 'document')
+  const [query, setQuery] = useState('')
+  const [pick, setPick] = useState('')
+  const [miss, setMiss] = useState(null) // categoria sem anexo
 
-  const ask = () => {
-    if (!('geolocation' in navigator)) { setStatus('unsupported'); return }
-    setStatus('asking')
-    navigator.geolocation.getCurrentPosition(
-      (p) => { setLoc({ lat: p.coords.latitude, lon: p.coords.longitude }); setStatus('ok') },
-      () => setStatus('denied'),
-      { enableHighAccuracy: false, timeout: 10000, maximumAge: 5 * 60 * 1000 },
-    )
+  // Opções: cada arquivo anexado (com a pasta) e as pastas que ainda não têm arquivo.
+  const norm = (t) => t.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
+  const q = norm(query.trim())
+  const groups = cats.map((c) => {
+    const list = docs.filter((f) => f.category === c.id)
+    const match = (t) => !q || norm(t).includes(q)
+    const items = list.filter((f) => match(f.name) || match(c.label))
+    return { c, items, empty: list.length === 0, show: items.length > 0 || (list.length === 0 && match(c.label)) }
+  }).filter((g) => g.show)
+
+  const go = (e) => {
+    e.preventDefault()
+    if (!pick) return
+    const [kind, id] = pick.split(':')
+    if (kind === 'file') {
+      const a = Object.assign(document.createElement('a'), { href: api.fileUrl(id), target: '_blank', rel: 'noopener' })
+      a.click()
+    } else {
+      setMiss(cats.find((c) => c.id === id))
+    }
   }
-  const go = (cat) => navigate('/mapa', { state: { cat, near: loc } })
-  const km = loc ? distKm(loc, home) : null
-  const where = {
-    idle: 'Mostrando o que há perto da residência, em Green Point.',
-    asking: 'Pedindo sua localização…',
-    ok: km < 1 ? 'Você está pertinho da residência.' : km < 60 ? `Você está a ${km.toLocaleString('pt-BR', { maximumFractionDigits: 1 })} km da residência.` : 'Você ainda não está em Cape Town: mostrando o entorno da residência.',
-    denied: 'Sem permissão de localização: usando a residência.',
-    unsupported: 'Este navegador não informa a localização: usando a residência.',
-  }[status]
+  const onPick = (v) => { setPick(v); setMiss(null) }
 
   return (
-    <article className="bcard bcard-map">
-      <svg className="bcard-map-art" viewBox="0 0 160 160" aria-hidden>
-        <circle cx="80" cy="80" r="70" /><circle cx="80" cy="80" r="48" /><circle cx="80" cy="80" r="26" />
-        <path className="road" d="M0 104 C40 96 70 112 160 84 M58 0 C66 50 60 110 72 160" />
-        <circle className="me" cx="80" cy="80" r="5" />
-        <circle className="pin" cx="112" cy="56" r="3.5" /><circle className="pin" cx="46" cy="64" r="3.5" /><circle className="pin" cx="104" cy="118" r="3.5" />
-      </svg>
-      <span className="bcard-kicker">Perto de você</span>
-      <h3 className="bcard-title">O que tem por aqui?</h3>
-      <p className="bcard-text">{where}</p>
-      <div className="bcard-chips">
-        {cats.map((c) => (
-          <button key={c.id} type="button" className="bchip" onClick={() => go(c.id)}>
-            <Icon name={c.icon} size={15} /> {c.label}
-          </button>
-        ))}
+    <article className="bcard bcard-docs">
+      <div className="bdocs-head">
+        <h3 className="bcard-title">Documentos</h3>
+        <Link to="/documentos" className="blink">Ver todos <Icon name="arrow" size={14} /></Link>
       </div>
-      <div className="bcard-foot">
-        {status !== 'ok' ? (
-          <button type="button" className="bbtn" onClick={ask} disabled={status === 'asking'}>
-            <Icon name="locate" size={16} /> {status === 'asking' ? 'Localizando…' : 'Usar minha localização'}
-          </button>
-        ) : (
-          <span className="bcard-ok"><span className="live-dot" /> Localização ativa</span>
-        )}
-        <Link to="/mapa" className="blink">Abrir o mapa <Icon name="arrow" size={14} /></Link>
-      </div>
-    </article>
-  )
-}
-
-function FxCard() {
-  return (
-    <article className="bcard bcard-fx glass-scope">
-      <span className="bcard-kicker">Câmbio</span>
-      <h3 className="bcard-title">Quanto é em reais?</h3>
-      <Converter />
+      <form className="bdocs-form" onSubmit={go}>
+        <label className="bdocs-search">
+          <Icon name="search" size={16} />
+          <input type="search" value={query} placeholder="Buscar pelo nome" aria-label="Buscar documento"
+            onChange={(e) => { setQuery(e.target.value); setMiss(null) }} />
+        </label>
+        <div className="bdocs-row">
+          <select value={pick} onChange={(e) => onPick(e.target.value)} aria-label="Escolher documento">
+            <option value="">{groups.length ? 'Escolha um documento' : 'Nada encontrado'}</option>
+            {groups.map(({ c, items, empty }) => (
+              <optgroup key={c.id} label={c.label}>
+                {items.map((f) => <option key={f.id} value={`file:${f.id}`}>{f.name}</option>)}
+                {empty && <option value={`cat:${c.id}`}>{c.label} · sem anexo</option>}
+              </optgroup>
+            ))}
+          </select>
+          <button type="submit" className="bbtn" disabled={!pick}>Ir</button>
+        </div>
+      </form>
+      {miss && (
+        <p className="bdocs-miss" role="status">
+          Ainda não há anexo em {miss.label}.{' '}
+          <button type="button" className="link-btn" onClick={() => navigate('/documentos', { state: { open: miss.id } })}>Anexar em Documentos</button>
+        </p>
+      )}
     </article>
   )
 }
@@ -257,9 +250,6 @@ export default function Home() {
 
       {/* 2. Cartão de embarque → documentos */}
       <section className="boarding">
-        <div className="boarding-index" aria-hidden>
-          <span>02</span><i /><span>04</span>
-        </div>
         <Kicker light>Boarding pass · chapter two</Kicker>
         <div className="boarding-grid">
           <div className="boarding-main">
@@ -270,8 +260,10 @@ export default function Home() {
             </Link>
           </div>
           <div className="boarding-side">
-            <NearbyCard />
-            <FxCard />
+            <div className="bcard bcard-mapwrap">
+              <RegionMap embedded />
+            </div>
+            <DocsCard />
           </div>
         </div>
       </section>

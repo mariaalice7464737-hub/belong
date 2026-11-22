@@ -91,8 +91,8 @@ function PlaceList({ items, onRoute, base, empty }) {
   )
 }
 
-/* ---------- O mapa único ---------- */
-function RegionMap() {
+/* ---------- O mapa único (também usado na Home, com embedded) ---------- */
+export function RegionMap({ embedded = false }) {
   const { guide, state, set } = useApp()
   const h = guide.housing
   const base = h.address
@@ -101,13 +101,29 @@ function RegionMap() {
 
   // Vindo da Home: categoria escolhida e, se permitido, a posição atual.
   const nav = useLocation().state || {}
-  const near = nav.near ? `${nav.near.lat},${nav.near.lon}` : null
+  // Minha localização: vem da Home ou do botão no mapa (só depois que você permite).
+  const [me, setMe] = useState(nav.near || null)
+  const [locStatus, setLocStatus] = useState(nav.near ? 'ok' : 'idle') // idle | asking | ok | denied
+  const near = me ? `${me.lat},${me.lon}` : null
+  const locate = () => {
+    if (!('geolocation' in navigator)) { setLocStatus('denied'); return }
+    setLocStatus('asking')
+    navigator.geolocation.getCurrentPosition(
+      (p) => {
+        setMe({ lat: p.coords.latitude, lon: p.coords.longitude })
+        setLocStatus('ok')
+        setView((v) => (v.kind === 'cat' ? v : { kind: 'me' }))
+      },
+      () => setLocStatus('denied'),
+      { timeout: 10000, maximumAge: 5 * 60 * 1000 },
+    )
+  }
 
   // O que o mapa está mostrando: residência, uma categoria ou uma rota.
   const [view, setView] = useState(() => (nav.cat && cats.some((c) => c.id === nav.cat) ? { kind: 'cat', id: nav.cat } : { kind: 'home' }))
   useEffect(() => {
-    if (nav.cat) document.getElementById('mapa-unico')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }, [nav.cat])
+    if (nav.cat && !embedded) document.getElementById('mapa-unico')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, [nav.cat, embedded])
   const [routeOpen, setRouteOpen] = useState(false)
   const from = state['route.from'] ?? base
   const to = state['route.to'] ?? ''
@@ -122,7 +138,7 @@ function RegionMap() {
   const routeTo = (place) => {
     set('route.from', base); set('route.to', place.to)
     showRoute({ from: base, to: place.to })
-    document.getElementById('mapa-unico')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    if (!embedded) document.getElementById('mapa-unico')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
   const setMode = (m) => { set('route.mode', m); if (view.kind === 'route') showRoute({ mode: m }) }
   const swap = () => { set('route.from', to); set('route.to', from) }
@@ -132,7 +148,8 @@ function RegionMap() {
   const src =
     view.kind === 'route' ? mapsDirEmbed(view.from, view.to, view.mode)
       : cat ? mapsEmbed(`${cat.search} near ${near || base}`)
-        : mapsEmbed(h.map_query)
+        : view.kind === 'me' && near ? mapsEmbed(near)
+          : mapsEmbed(h.map_query)
   const curTo = view.kind === 'route' ? view.to : to
   // Se o destino é um lugar da lista, o favorito herda o nome e a categoria dele.
   const known = cats.flatMap((c) => c.items.map((it) => ({ ...it, category: c.id }))).find((it) => it.to === curTo)
@@ -145,10 +162,10 @@ function RegionMap() {
     .filter((g) => g.items.length)
 
   return (
-    <section className="block" id="mapa-unico">
-      <SectionTitle kicker="01 · Por aqui" title="Daqui pra lá." />
+    <section className={embedded ? 'region-embedded' : 'block'} id={embedded ? undefined : 'mapa-unico'}>
+      {!embedded && <SectionTitle kicker="01 · Por aqui" title="Daqui pra lá." />}
 
-      <div className="region">
+      <div className={`region ${embedded ? 'is-embedded' : ''}`}>
         {/* Barra de rota, por cima do mapa (como no Google Maps) */}
         <div className={`route-bar ${routeOpen ? 'is-open' : ''}`}>
           {!routeOpen ? (
@@ -196,13 +213,17 @@ function RegionMap() {
           <iframe key={src} title="Mapa" src={src} loading="lazy" referrerPolicy="no-referrer-when-downgrade" allowFullScreen />
           <div className="map-overlay">
             <AroundMenu cats={cats} active={cat?.id} onPick={(id) => setView({ kind: 'cat', id })} />
+            <button type="button" className={`map-btn ${locStatus === 'ok' && (view.kind === 'me' || cat) ? 'is-active' : ''}`} onClick={locate}
+              disabled={locStatus === 'asking'} title={locStatus === 'denied' ? 'Sem permissão de localização' : undefined}>
+              <Icon name="locate" size={16} /> {locStatus === 'asking' ? 'Localizando…' : locStatus === 'denied' ? 'Sem permissão' : 'Minha localização'}
+            </button>
             {view.kind !== 'home' && (
               <button type="button" className="map-btn" onClick={goHome}><Icon name="home" size={16} /> Residência</button>
             )}
           </div>
         </div>
 
-        <div className="region-foot">
+        {!embedded && <div className="region-foot">
           {view.kind === 'route' ? (
             <>
               {favPlace && <StarButton place={favPlace} />}
@@ -220,10 +241,10 @@ function RegionMap() {
               </div>
             </>
           )}
-        </div>
+        </div>}
       </div>
 
-      {cat && (
+      {!embedded && cat && (
         <div className="region-list">
           <div className="group-head">
             <span className="mono-label">{cat.label} {near ? 'perto de você' : 'perto da residência'}</span>
@@ -233,7 +254,7 @@ function RegionMap() {
         </div>
       )}
 
-      {favGroups.length > 0 && (
+      {!embedded && favGroups.length > 0 && (
         <div className="region-list" id="favoritos">
           <h3 className="fav-title"><Icon name="star" size={18} /> Favoritos <small>· {fav.list.length}</small></h3>
           {favGroups.map((g) => (

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useRef, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { createPortal } from 'react-dom'
 import { useApp } from '../AppContext'
 import { api } from '../api'
@@ -123,7 +124,9 @@ function FlightSheet({ open, onClose }) {
 
 export default function Documents() {
   const { guide, state, files } = useApp()
-  const [openCat, setOpenCat] = useState(null)
+  // Vindo da Home ("Anexar em Documentos"): abre a pasta direto.
+  const navOpen = useLocation().state?.open
+  const [openCat, setOpenCat] = useState(() => guide.doc_categories.find((c) => c.id === navOpen) || null)
   const [flightOpen, setFlightOpen] = useState(false)
   const isDone = (id) => {
     const d = guide.documents.find((x) => x.id === id)

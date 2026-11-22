@@ -734,31 +734,61 @@ a.ch:active { background: var(--paper-2); }
 .h-icon { display: grid; place-items: center; }
 .forecast button { justify-items: center; }
 
-/* ---- Home: indicadores compactos no topo direito ---- */
-.live-panel {
-  position: absolute; z-index: 3; right: 16px; top: calc((var(--top-h) - 30px) / 2);
-  display: flex; align-items: center; gap: 2px; padding: 2px 3px 2px 2px; border-radius: 999px;
-  background: rgba(11, 30, 45, .22); border: 1px solid rgba(255, 255, 255, .22);
-  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+/* ---- Home: indicadores no topo direito (expansível) ---- */
+.live-panel { position: absolute; z-index: 3; right: 16px; top: calc((var(--top-h) - 36px) / 2); display: flex; flex-direction: column; align-items: flex-end; }
+.live-bar {
+  display: flex; align-items: center; height: 36px; padding: 0 4px; border-radius: 999px; cursor: pointer; font: inherit; color: var(--white);
+  background: rgba(11, 30, 45, .24); border: 1px solid rgba(255, 255, 255, .24);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); transition: background .2s;
 }
-.live-cell {
-  display: inline-flex; align-items: center; gap: 4px; height: 26px; padding: 0 8px; border-radius: 999px;
-  border: 0; background: none; color: var(--white); cursor: pointer; font: inherit; white-space: nowrap;
-}
-.live-cell + .live-cell { border-left: 1px solid rgba(255, 255, 255, .18); border-radius: 0 999px 999px 0; }
-.live-cell:hover { background: rgba(255, 255, 255, .1); }
-.live-cell:focus-visible, .live-refresh:focus-visible { outline: 2px solid var(--white); outline-offset: 1px; }
-.live-cell:disabled { cursor: default; }
-.live-cell b { font: 500 12px/1 var(--sans); font-variant-numeric: tabular-nums; }
-.live-cell small { font: 500 9px/1 var(--mono); letter-spacing: .08em; opacity: .7; }
-.live-refresh { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; border: 0; background: none; cursor: pointer; }
-.live-dot { width: 6px; height: 6px; border-radius: 50%; background: #7be0a1; box-shadow: 0 0 0 2px rgba(123, 224, 161, .25); }
+.live-bar:hover, .live-panel.is-open .live-bar { background: rgba(11, 30, 45, .38); }
+.live-bar:focus-visible { outline: 2px solid var(--white); outline-offset: 2px; }
+.live-cell { display: inline-flex; align-items: center; gap: 5px; padding: 0 11px; white-space: nowrap; }
+.live-cell + .live-cell { border-left: 1px solid rgba(255, 255, 255, .2); }
+.live-cell b { font: 500 14px/1 var(--sans); font-variant-numeric: tabular-nums; letter-spacing: .01em; }
+.live-cell small { font: 500 9.5px/1 var(--mono); letter-spacing: .1em; opacity: .72; }
+.live-status { gap: 6px; padding-right: 8px; }
+.live-chev { opacity: .8; transition: transform .2s; }
+.is-open .live-chev { transform: rotate(180deg); }
+.live-dot { width: 7px; height: 7px; border-radius: 50%; background: #7be0a1; box-shadow: 0 0 0 2px rgba(123, 224, 161, .25); flex: none; }
 .live-dot.is-off { background: #f0a47e; box-shadow: 0 0 0 2px rgba(240, 164, 126, .25); }
-.live-refresh.is-spinning .live-dot { animation: pulse 1s ease-in-out infinite; }
-@keyframes pulse { 50% { opacity: .3; } }
-@media (prefers-reduced-motion: reduce) { .live-refresh.is-spinning .live-dot { animation: none; } }
-/* No celular o logo ocupa a linha: os indicadores descem um pouco, sem empurrar nada. */
-@media (max-width: 559px) { .live-panel { top: calc(var(--top-h) + 2px); right: 12px; } }
+
+.live-more {
+  width: min(340px, calc(100vw - 32px)); margin-top: 8px; padding: 6px; border-radius: 18px; color: var(--white);
+  background: rgba(16, 36, 50, .55); border: 1px solid rgba(255, 255, 255, .22);
+  -webkit-backdrop-filter: blur(18px) saturate(1.15); backdrop-filter: blur(18px) saturate(1.15);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, .25); animation: drop .18s ease-out;
+}
+@keyframes drop { from { opacity: 0; transform: translateY(-4px); } }
+.lm-row { display: grid; grid-template-columns: 58px minmax(0, 1fr) auto; align-items: start; gap: 8px; width: 100%; padding: 10px; border: 0; border-radius: 12px;
+  background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.lm-row + .lm-row { border-top: 1px solid rgba(255, 255, 255, .1); border-radius: 0 0 12px 12px; }
+.lm-row:hover { background: rgba(255, 255, 255, .07); }
+.lm-row:disabled { cursor: default; }
+.lm-label { font: 500 9.5px/1.6 var(--mono); letter-spacing: .12em; text-transform: uppercase; opacity: .65; padding-top: 2px; }
+.lm-body { display: grid; gap: 3px; }
+.lm-body b { font: 500 14px/1.3 var(--sans); }
+.lm-body small { font: 400 12px/1.35 var(--sans); opacity: .75; }
+.lm-go { display: inline-flex; align-items: center; gap: 3px; font: 500 11px var(--sans); opacity: .8; white-space: nowrap; padding-top: 2px; }
+.lm-foot { display: flex; align-items: center; gap: 8px; padding: 8px 10px 4px; border-top: 1px solid rgba(255, 255, 255, .1); font: 400 11px var(--mono); opacity: .9; }
+.lm-foot > span:nth-child(2) { flex: 1; }
+.lm-refresh { display: inline-flex; align-items: center; gap: 5px; border: 1px solid rgba(255, 255, 255, .25); border-radius: 999px; padding: 4px 10px;
+  background: none; color: inherit; font: 500 11px var(--sans); cursor: pointer; }
+.lm-refresh.is-spinning .icon { animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .lm-refresh.is-spinning .icon, .live-more { animation: none; } }
+/* No celular o logo ocupa a linha: os indicadores ficam logo abaixo, sem empurrar nada. */
+@media (max-width: 559px) { .live-panel { top: calc(var(--top-h) + 2px); right: 12px; } .live-cell { padding: 0 9px; } }
+
+/* Título: grande, mas sempre acima da linha das montanhas, centrado no céu. */
+.hero-title {
+  top: calc(var(--top-h) + 56px); bottom: calc(min(52%, 88vw) + 18px); transform: none;
+  justify-content: center;
+}
+.ht-line { font-size: clamp(54px, min(21vw, 12.5vh), 190px); }
+.ht-script { font-size: clamp(42px, min(15vw, 9vh), 130px); }
+.ht-small { font-size: clamp(34px, min(12.4vw, 7.4vh), 128px); }
+@media (min-width: 960px) { .hero-title { bottom: calc(min(max(40%, 30vw), 50%) + 22px); top: calc(var(--top-h) + 24px); } }
 
 /* ---- Pop-ups translúcidos ---- */
 .sheet-backdrop.is-glass { background: rgba(6, 16, 24, .38); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
@@ -815,10 +845,18 @@ a.ch:active { background: var(--paper-2); }
   .page-body, .chapters, .map-hero, .docs-hero, .page > section:first-child { padding-left: max(108px, calc((100vw - 1100px) / 2)) !important; }
   .boarding-index { left: 120px !important; }
 }
-@media (min-width: 560px) { .hero-title { top: 34%; } }
-@media (min-width: 960px) { .hero-title { top: 31%; } }
 .sheet.is-glass .clock-diff b { color: var(--navy); }
 .sheet.is-glass .clocks { padding: 14px; gap: 6px; }
 .sheet.is-glass .clock strong { font-size: clamp(28px, 8.4vw, 42px); }
 .clock { min-width: 0; }
 .clock .mono-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+/* A barra do topo é transparente na home: deixa os cliques passarem para os indicadores. */
+.topbar.is-overlay { pointer-events: none; }
+.topbar.is-overlay > * { pointer-events: auto; }
+/* Paisagem no computador: não passa de metade da tela; se precisar cortar, corta o mar, nunca os picos. */
+@media (min-width: 960px) { .hero-art { height: min(max(40%, 30vw), 50%); } }
+@media (min-width: 960px) {
+  .ht-line { font-size: clamp(54px, min(21vw, 14vh), 190px); }
+  .ht-script { font-size: clamp(42px, min(15vw, 10vh), 130px); }
+  .ht-small { font-size: clamp(34px, min(12.4vw, 8.2vh), 128px); }
+}

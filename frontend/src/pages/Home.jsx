@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Link } from 'react-router-dom'
 import { useApp } from '../AppContext'
@@ -6,7 +6,7 @@ import { PassCarousel } from '../components/BoardingPass'
 import Icon from '../components/Icon'
 import { Kicker, Sheet } from '../components/ui'
 import { Clocks, Converter } from './Essentials'
-import { CPT_TZ, SP_TZ, WeatherIcon, WeatherSheet, fmtTime, refreshRates, useNow, useRate, useWeather, wmo } from '../components/Live'
+import { CPT_TZ, SP_TZ, WeatherIcon, WeatherSheet, fmtDay, fmtTime, refreshRates, useNow, useRate, useWeather, wmo } from '../components/Live'
 
 /**
  * Paisagem de Cape Town vista da baía: Devil's Peak à esquerda, o topo reto da
@@ -15,7 +15,7 @@ import { CPT_TZ, SP_TZ, WeatherIcon, WeatherSheet, fmtTime, refreshRates, useNow
  */
 function HeroArt() {
   return (
-    <svg className="hero-art" viewBox="-400 442 1200 358" preserveAspectRatio="xMidYMax slice" aria-hidden>
+    <svg className="hero-art" viewBox="-400 442 1200 358" preserveAspectRatio="xMidYMin slice" aria-hidden>
       <defs>
         <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor="#6f8f97" />
@@ -64,31 +64,78 @@ function LivePanel() {
   const { w, failed, loading, refresh } = useWeather()
   const now = useNow(1000)
   const fx = useRate('ZAR', 'BRL', { rate: guide.currency.default_fx, date: guide.currency.fx_date })
-  const [open, setOpen] = useState(null) // 'weather' | 'time' | 'fx'
+  const [expanded, setExpanded] = useState(false)
+  const [open, setOpen] = useState(null) // pop-up: 'weather' | 'time' | 'fx'
+  const ref = useRef(null)
   const c = w?.current
+  const d = w?.daily
   const updated = Math.min(...[w?.fetchedAt, fx.fetchedAt].filter(Boolean)) || null
   const offline = failed || !fx.live
   const doRefresh = () => { refresh(); refreshRates('ZAR') }
+  const money = (n, dig = 2) => n.toLocaleString('pt-BR', { minimumFractionDigits: dig, maximumFractionDigits: dig })
+  const pop = (k) => { setOpen(k); setExpanded(false) }
+
+  // Fecha o cartão expandido ao tocar fora ou apertar Esc.
+  useEffect(() => {
+    if (!expanded) return
+    const onDown = (e) => { if (!ref.current?.contains(e.target)) setExpanded(false) }
+    const onKey = (e) => e.key === 'Escape' && setExpanded(false)
+    document.addEventListener('pointerdown', onDown)
+    document.addEventListener('keydown', onKey)
+    return () => { document.removeEventListener('pointerdown', onDown); document.removeEventListener('keydown', onKey) }
+  }, [expanded])
 
   return (
-    <div className="live-panel" aria-label="Agora em Cape Town">
-      <button type="button" className="live-cell" onClick={() => w && setOpen('weather')} disabled={!w}
-        aria-label={c ? `Clima: ${Math.round(c.temperature_2m)} graus, ${wmo(c.weather_code)[0]}. Ver a semana` : 'Clima indisponível'}
-        title={c ? wmo(c.weather_code)[0] : undefined}>
-        {c && <WeatherIcon code={c.weather_code} isDay={c.is_day} size={16} />}
-        <b>{c ? `${Math.round(c.temperature_2m)}°` : '—'}</b>
+    <div className={`live-panel ${expanded ? 'is-open' : ''}`} ref={ref}>
+      <button type="button" className="live-bar" onClick={() => setExpanded((v) => !v)} aria-expanded={expanded} aria-controls="live-more"
+        aria-label={`Agora em Cape Town: ${c ? `${Math.round(c.temperature_2m)} graus, ` : ''}${fmtTime(now, CPT_TZ)}, rand a R$ ${money(fx.rate || 0)}. ${expanded ? 'Recolher' : 'Ver mais'}`}>
+        <span className="live-cell">
+          {c && <WeatherIcon code={c.weather_code} isDay={c.is_day} size={18} />}
+          <b>{c ? `${Math.round(c.temperature_2m)}°` : '—'}</b>
+        </span>
+        <span className="live-cell"><b>{fmtTime(now, CPT_TZ)}</b><small>CPT</small></span>
+        <span className="live-cell"><b>R$ {fx.rate ? money(fx.rate) : '—'}</b></span>
+        <span className="live-cell live-status"><span className={`live-dot ${offline ? 'is-off' : ''}`} /><Icon name="chevron" size={14} className="live-chev" /></span>
       </button>
-      <button type="button" className="live-cell" onClick={() => setOpen('time')} aria-label={`Cape Town ${fmtTime(now, CPT_TZ)}, São Paulo ${fmtTime(now, SP_TZ)}. Ver horários`}>
-        <b>{fmtTime(now, CPT_TZ)}</b><small>CPT</small>
-      </button>
-      <button type="button" className="live-cell" onClick={() => setOpen('fx')} aria-label="Abrir o conversor de moedas">
-        <b>R$ {fx.rate ? fx.rate.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '—'}</b>
-      </button>
-      <button type="button" className={`live-refresh ${loading ? 'is-spinning' : ''}`} onClick={doRefresh}
-        title={offline ? 'Sem conexão · dados salvos' : `Atualizado ${agoLabel(updated, now)}`}
-        aria-label={`${offline ? 'Sem conexão, usando dados salvos' : `Ao vivo, atualizado ${agoLabel(updated, now)}`}. Atualizar`}>
-        <span className={`live-dot ${offline ? 'is-off' : ''}`} aria-hidden />
-      </button>
+
+      {expanded && (
+        <div className="live-more" id="live-more" role="region" aria-label="Mais informações">
+          <button type="button" className="lm-row" onClick={() => w && pop('weather')} disabled={!w}>
+            <span className="lm-label">Clima</span>
+            {c ? (
+              <span className="lm-body">
+                <b>{Math.round(c.temperature_2m)}° · {wmo(c.weather_code)[0]}</b>
+                <small>Sensação {Math.round(c.apparent_temperature)}° · mín {Math.round(d.temperature_2m_min[0])}° máx {Math.round(d.temperature_2m_max[0])}° · vento {Math.round(c.wind_speed_10m)} km/h</small>
+              </span>
+            ) : <span className="lm-body"><small>{failed ? 'Indisponível agora' : 'Carregando…'}</small></span>}
+            <span className="lm-go">Semana <Icon name="arrow" size={12} /></span>
+          </button>
+          <button type="button" className="lm-row" onClick={() => pop('time')}>
+            <span className="lm-label">Horário</span>
+            <span className="lm-body">
+              <b>{fmtTime(now, CPT_TZ)} Cape Town · {fmtTime(now, SP_TZ)} São Paulo</b>
+              <small>Cape Town está 5h à frente · {fmtDay(now, CPT_TZ)}</small>
+            </span>
+            <span className="lm-go">Fusos <Icon name="arrow" size={12} /></span>
+          </button>
+          <button type="button" className="lm-row" onClick={() => pop('fx')}>
+            <span className="lm-label">Câmbio</span>
+            <span className="lm-body">
+              <b>R 1 = R$ {fx.rate ? money(fx.rate, 4) : '—'}</b>
+              <small>{fx.rate ? `R$ 1 = R ${money(1 / fx.rate)} · R 100 = R$ ${money(fx.rate * 100)}` : fx.source}</small>
+            </span>
+            <span className="lm-go">Converter <Icon name="arrow" size={12} /></span>
+          </button>
+          <div className="lm-foot">
+            <span className={`live-dot ${offline ? 'is-off' : ''}`} aria-hidden />
+            <span>{offline ? 'Sem conexão · usando dados salvos' : `Atualizado ${agoLabel(updated, now)}`}</span>
+            <button type="button" className={`lm-refresh ${loading ? 'is-spinning' : ''}`} onClick={doRefresh}>
+              <Icon name="refresh" size={13} /> Atualizar
+            </button>
+          </div>
+        </div>
+      )}
+
       <WeatherSheet glass w={w} open={open === 'weather'} onClose={() => setOpen(null)} />
       {open === 'time' && createPortal(
         <Sheet glass open onClose={() => setOpen(null)} kicker="Fuso horário" title="Agora">

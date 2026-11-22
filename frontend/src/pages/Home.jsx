@@ -6,7 +6,7 @@ import { PassCarousel } from '../components/BoardingPass'
 import Icon from '../components/Icon'
 import { Kicker, Sheet } from '../components/ui'
 import { Clocks, Converter } from './Essentials'
-import { RegionMap } from './MapPage'
+import { RegionMap } from '../components/RegionMap'
 import { api } from '../api'
 import { CPT_TZ, SP_TZ, WeatherIcon, WeatherSheet, fmtDay, fmtTime, refreshRates, useNow, useRate, useWeather, wmo } from '../components/Live'
 
@@ -225,7 +225,7 @@ export default function Home() {
     <main className="home">
       {/* 1. Chamada principal → mapa */}
       <section className="hero">
-        <Link to="/mapa" className="hero-link" aria-label="Abrir o mapa da viagem" />
+        <Link to="/explore" className="hero-link" aria-label="Abrir o Explore" />
         <HeroArt />
         <div className="hero-photo" />
         <div className="hero-shade" />

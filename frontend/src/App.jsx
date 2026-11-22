@@ -1,11 +1,11 @@
 import { useEffect } from 'react'
-import { Route, Routes, useLocation } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { useApp } from './AppContext'
 import { BottomNav, SideNav, TopBar } from './components/Chrome'
 import Documents from './pages/Documents'
 import Essentials from './pages/Essentials'
 import Home from './pages/Home'
-import MapPage from './pages/MapPage'
+import Explore from './pages/Explore'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -43,7 +43,8 @@ export default function App() {
       <TopBar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/mapa" element={<MapPage />} />
+        <Route path="/explore" element={<Explore />} />
+        <Route path="/mapa" element={<Navigate to="/explore" replace />} />
         <Route path="/documentos" element={<Documents />} />
         <Route path="/essenciais" element={<Essentials />} />
         <Route path="*" element={<Home />} />

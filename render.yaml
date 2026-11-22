@@ -1,0 +1,24 @@
+# Render Blueprint — só a API do Explore (rotas de documentos NÃO vão para a nuvem).
+# Render → New → Blueprint → escolha este repositório. Depois preencha as chaves
+# no painel do Render (Environment); nunca coloque chaves neste arquivo.
+services:
+  - type: web
+    name: belong-explore-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.explore_main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/explore/health
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: CORS_ORIGINS
+        value: https://mariaalice7464737-hub.github.io
+      - key: GOOGLE_PLACES_API_KEY
+        sync: false
+      - key: TICKETMASTER_API_KEY
+        sync: false
+      - key: EXPLORE_FX
+        value: "1"

@@ -2,7 +2,7 @@ import { Link, NavLink, useLocation } from 'react-router-dom'
 import { useApp } from '../AppContext'
 import Icon from './Icon'
 
-const TITLES = { '/mapa': 'O mapa', '/documentos': 'Documentos', '/essenciais': 'Essenciais' }
+const TITLES = { '/explore': 'Explore', '/documentos': 'Documentos', '/essenciais': 'Essenciais' }
 
 /** Barra do topo. Transparente sobre o hero da home; sólida nas outras páginas. */
 export function TopBar() {
@@ -22,7 +22,7 @@ export function TopBar() {
 
 const NAV = [
   { to: '/', label: 'Início', icon: 'compass', end: true },
-  { to: '/mapa', label: 'Mapa', icon: 'map' },
+  { to: '/explore', label: 'Explore', icon: 'sparkle' },
   { to: '/documentos', label: 'Docs', icon: 'passport' },
   { to: '/essenciais', label: 'Essenciais', icon: 'clock' },
 ]
@@ -46,7 +46,7 @@ export function BottomNav() {
   return (
     <nav className="bottomnav" aria-label="Navegação">
       <NavLink to="/" end><Icon name="compass" /><span>Início</span></NavLink>
-      <NavLink to="/mapa"><Icon name="map" /><span>Mapa</span></NavLink>
+      <NavLink to="/explore"><Icon name="sparkle" /><span>Explore</span></NavLink>
       <NavLink to="/documentos"><Icon name="passport" /><span>Docs</span></NavLink>
       <NavLink to="/essenciais"><Icon name="clock" /><span>Essenciais</span></NavLink>
     </nav>

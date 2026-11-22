@@ -5,3 +5,9 @@ backend/storage/
 __pycache__/
 *.pyc
 .DS_Store
+
+# Chaves e configurações locais
+.env
+.env.*
+!.env.example
+.pytest_cache/

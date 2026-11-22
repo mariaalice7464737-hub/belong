@@ -1,9 +1,9 @@
+// Mapa interativo (Google Maps) com rota, "Ao redor", localização e favoritos. Usado na Home.
 import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useApp } from '../AppContext'
-import AfricaMap from '../components/AfricaMap'
-import Icon from '../components/Icon'
-import { ExtLink, Kicker, SectionTitle } from '../components/ui'
+import Icon from './Icon'
+import { ExtLink, SectionTitle } from './ui'
 import { mapsDir, mapsDirEmbed, mapsEmbed, mapsSearch } from '../utils'
 
 const MODES = [
@@ -266,23 +266,5 @@ export function RegionMap({ embedded = false }) {
         </div>
       )}
     </section>
-  )
-}
-
-export default function MapPage() {
-  return (
-    <main className="page map-page">
-      <section className="map-hero">
-        <div className="map-hero-head">
-          <Kicker light>Chapter one · the map</Kicker>
-          <h1>Off the <em>map,</em><br />on the road.</h1>
-        </div>
-        <AfricaMap />
-      </section>
-
-      <div className="page-body">
-        <RegionMap />
-      </div>
-    </main>
   )
 }

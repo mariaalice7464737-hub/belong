@@ -33,6 +33,8 @@ jobs:
         env:
           VITE_STATIC: '1'
           VITE_BASE: /${{ github.event.repository.name }}/
+          # URL pública da API do Explore (Settings → Secrets and variables → Actions → Variables)
+          VITE_EXPLORE_API_URL: ${{ vars.EXPLORE_API_URL }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: frontend/dist

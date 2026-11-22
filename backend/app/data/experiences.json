@@ -1,0 +1,86 @@
+{
+  "_about": "Experiências conferidas à mão para o provider 'Belong Local'. Cada item precisa de source.url e source.checked_at. Não invente datas, horários ou preços: deixe o campo fora quando a fonte não confirma. days: 0=segunda … 6=domingo.",
+  "experiences": [
+    {
+      "id": "greenpoint-parkrun",
+      "type": "recurring",
+      "name": "Green Point parkrun",
+      "description": "Corrida (ou caminhada) de 5 km cronometrada, gratuita, todo sábado de manhã no Green Point Park. É preciso se cadastrar uma vez no site do parkrun e levar o código de barras.",
+      "category": "movement",
+      "tags": ["parkrun", "corrida", "running", "5k", "comunidade"],
+      "outdoor": true,
+      "location": {"venue": "Green Point Park", "address": "Vlei Road, Green Point", "neighborhood": "Green Point", "city": "Cape Town", "lat": -33.9042, "lon": 18.4010},
+      "schedule": {"recurrence": "Todo sábado, 8h", "days": [5]},
+      "price": {"is_free": true, "min": 0, "currency": "ZAR"},
+      "links": {"website": "https://www.parkrun.co.za/greenpoint/"},
+      "source": {"url": "https://www.sothebysrealty.co.za/news/get-your-running-shoes-on-for-green-points-weekly-parkrun/", "checked_at": "2026-11-22"}
+    },
+    {
+      "id": "ozcf-market-day",
+      "type": "recurring",
+      "name": "Oranjezicht City Farm Market",
+      "description": "Feira de produtores e comida artesanal em Granger Bay, ao lado do V&A Waterfront, com mesas ao ar livre de frente para o mar. Horários variam entre as fontes: confira no site antes de ir.",
+      "category": "food-community",
+      "tags": ["mercado", "market", "feira", "comida", "brunch", "produtores"],
+      "outdoor": true,
+      "location": {"venue": "OZCF Market, Granger Bay", "address": "Granger Bay Boulevard, V&A Waterfront", "neighborhood": "V&A Waterfront", "city": "Cape Town", "lat": -33.9015, "lon": 18.4140},
+      "schedule": {"recurrence": "Sábados e domingos, de manhã", "days": [5, 6]},
+      "price": {"is_free": true, "min": 0, "currency": "ZAR"},
+      "links": {"website": "https://www.ozcf.co.za/market-day/"},
+      "source": {"url": "https://www.timeout.com/cape-town/things-to-do/oranjezicht-city-farm-market", "checked_at": "2026-11-22"}
+    },
+    {
+      "id": "neighbourgoods-market",
+      "type": "recurring",
+      "name": "Neighbourgoods Market",
+      "description": "Mercado de comida e design no Old Biscuit Mill, em Woodstock, todo sábado de manhã. Entrada gratuita; chegue cedo porque enche.",
+      "category": "food-community",
+      "tags": ["mercado", "market", "comida", "design", "woodstock"],
+      "outdoor": false,
+      "location": {"venue": "The Old Biscuit Mill", "address": "373–375 Albert Road, Woodstock", "neighborhood": "Woodstock", "city": "Cape Town", "lat": -33.9274, "lon": 18.4573},
+      "schedule": {"recurrence": "Sábados, 9h–14h", "days": [5]},
+      "price": {"is_free": true, "min": 0, "currency": "ZAR"},
+      "links": {"website": "http://www.neighbourgoodsmarket.co.za/"},
+      "source": {"url": "https://www.capetownetc.com/archive/the-neighbourgoods-market-in-woodstock/", "checked_at": "2026-11-22"}
+    },
+    {
+      "id": "kirstenbosch-sunset-2026-11-29",
+      "type": "event",
+      "name": "Kirstenbosch Summer Sunset Concert: Booshle G e Freshlyground",
+      "description": "Show de domingo no gramado do Jardim Botânico de Kirstenbosch, aos pés da Table Mountain. Leve canga e piquenique. Ingressos só pela Webtickets (parceira oficial) ou no portão.",
+      "category": "music-night",
+      "tags": ["show", "concerto", "música ao vivo", "piquenique", "kirstenbosch"],
+      "outdoor": true,
+      "location": {"venue": "Kirstenbosch National Botanical Garden", "address": "Rhodes Drive, Newlands", "neighborhood": "Newlands", "city": "Cape Town", "lat": -33.9875, "lon": 18.4327},
+      "schedule": {"date": "2026-11-29"},
+      "links": {"tickets": "https://www.webtickets.co.za/"},
+      "source": {"url": "https://www.bizcommunity.com/article/mi-casa-lira-and-mango-groove-headline-kirstenboschs-34th-summer-concert-season-639951a", "checked_at": "2026-11-22"}
+    },
+    {
+      "id": "kirstenbosch-sunset-2026-12-06",
+      "type": "event",
+      "name": "Kirstenbosch Summer Sunset Concert: Mandisi Dyantyis",
+      "description": "Show de domingo no gramado do Jardim Botânico de Kirstenbosch. Ingressos só pela Webtickets (parceira oficial) ou no portão.",
+      "category": "music-night",
+      "tags": ["show", "concerto", "jazz", "música ao vivo", "kirstenbosch"],
+      "outdoor": true,
+      "location": {"venue": "Kirstenbosch National Botanical Garden", "address": "Rhodes Drive, Newlands", "neighborhood": "Newlands", "city": "Cape Town", "lat": -33.9875, "lon": 18.4327},
+      "schedule": {"date": "2026-12-06"},
+      "links": {"tickets": "https://www.webtickets.co.za/"},
+      "source": {"url": "https://www.bizcommunity.com/article/mi-casa-lira-and-mango-groove-headline-kirstenboschs-34th-summer-concert-season-639951a", "checked_at": "2026-11-22"}
+    },
+    {
+      "id": "kirstenbosch-sunset-season-2026-27",
+      "type": "recurring",
+      "name": "Kirstenbosch Summer Sunset Concerts (temporada 2026/27)",
+      "description": "Série de 19 shows de domingo à tarde no Jardim Botânico de Kirstenbosch, de 22 de novembro de 2026 a 28 de março de 2027. Programação completa e ingressos na Webtickets.",
+      "category": "music-night",
+      "tags": ["show", "concerto", "música ao vivo", "piquenique", "domingo", "kirstenbosch"],
+      "outdoor": true,
+      "location": {"venue": "Kirstenbosch National Botanical Garden", "address": "Rhodes Drive, Newlands", "neighborhood": "Newlands", "city": "Cape Town", "lat": -33.9875, "lon": 18.4327},
+      "schedule": {"recurrence": "Domingos, de 22/11/2026 a 28/03/2027", "days": [6], "season_start": "2026-11-22", "season_end": "2027-03-28"},
+      "links": {"tickets": "https://www.webtickets.co.za/"},
+      "source": {"url": "https://www.bizcommunity.com/article/mi-casa-lira-and-mango-groove-headline-kirstenboschs-34th-summer-concert-season-639951a", "checked_at": "2026-11-22"}
+    }
+  ]
+}

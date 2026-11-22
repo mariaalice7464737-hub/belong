@@ -23,6 +23,8 @@ from fastapi.responses import FileResponse, StreamingResponse
 
 from . import db
 from .budget import compute_budget
+from .explore import store as explore_store
+from .explore.router import router as explore_router
 
 APP_DIR = Path(__file__).resolve().parent
 GUIDE_PATH = APP_DIR / "data" / "guide.json"
@@ -33,14 +35,16 @@ FILE_KINDS = {"document", "room"}  # "room" = foto do quarto (só uma)
 FILE_ID_RE = re.compile(r"^[0-9a-f]{32}$")
 
 db.init()
+explore_store.init()
 
 app = FastAPI(title="Cape Town Editorial API", version="1.0.0")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],  # app local: só o frontend local
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.include_router(explore_router)  # /api/explore/* (o mesmo módulo que vai para o Render)
 
 
 def load_guide() -> dict[str, Any]:

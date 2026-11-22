@@ -1113,6 +1113,24 @@
       ]
     },
     {
+      "id": "cafe",
+      "label": "Cafés",
+      "icon": "coffee",
+      "search": "coffee shops",
+      "items": [
+        {
+          "name": "Jason Bakery Green Point",
+          "description": "Somerset Road, Green Point · café e padaria",
+          "to": "Jason Bakery Green Point Cape Town"
+        },
+        {
+          "name": "Café Chiffon",
+          "description": "72 De Waterkant Street · café e doces",
+          "to": "Cafe Chiffon 72 De Waterkant Street Cape Town"
+        }
+      ]
+    },
+    {
       "id": "restaurante",
       "label": "Restaurantes",
       "icon": "fork",
@@ -1592,5 +1610,12 @@
         "url": "https://esim.holafly.com/esim-south-africa/?currency=USD"
       }
     ]
-  }
+  },
+  "home_nearby": [
+    "cafe",
+    "supermercado",
+    "farmacia",
+    "academia",
+    "restaurante"
+  ]
 }

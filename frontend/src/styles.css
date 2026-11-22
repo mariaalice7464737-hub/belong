@@ -792,36 +792,36 @@ a.ch:active { background: var(--paper-2); }
 
 /* ---- Pop-ups translúcidos ---- */
 .sheet-backdrop.is-glass { background: rgba(6, 16, 24, .38); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
-.sheet.is-glass {
+:is(.sheet.is-glass, .glass-scope) {
   color: var(--white); background: rgba(22, 44, 58, .62); border: 1px solid rgba(255, 255, 255, .22);
   -webkit-backdrop-filter: blur(22px) saturate(1.2); backdrop-filter: blur(22px) saturate(1.2);
   box-shadow: 0 24px 60px rgba(0, 0, 0, .35);
 }
-.sheet.is-glass .sheet-grip { background: rgba(255, 255, 255, .35); }
-.sheet.is-glass .kicker { color: rgba(255, 255, 255, .7); }
-.sheet.is-glass .icon-btn { color: var(--white); }
-.sheet.is-glass .fine, .sheet.is-glass .muted, .sheet.is-glass .day-summary { color: rgba(255, 255, 255, .72); }
-.sheet.is-glass .day-summary span:first-child { color: var(--white); }
-.sheet.is-glass .hourly, .sheet.is-glass .card { background: rgba(255, 255, 255, .07); box-shadow: 0 0 0 1px rgba(255, 255, 255, .14); color: var(--white); }
-.sheet.is-glass .hourly li { border-color: rgba(255, 255, 255, .12); }
-.sheet.is-glass .h-time, .sheet.is-glass .h-wind { color: rgba(255, 255, 255, .65); }
-.sheet.is-glass .h-rain { color: #9fd0f2; }
-.sheet.is-glass .h-bar i { background: var(--white); }
-.sheet.is-glass .week button { color: var(--white); }
-.sheet.is-glass .week small { color: rgba(255, 255, 255, .65); }
-.sheet.is-glass .week button.is-on { background: rgba(255, 255, 255, .14); border-color: rgba(255, 255, 255, .25); box-shadow: none; }
-.sheet.is-glass .wi-cloud { fill: #eef3f6; }
-.sheet.is-glass .clocks { margin-top: 14px; max-width: none; }
-.sheet.is-glass .conv-row { background: rgba(255, 255, 255, .08); }
-.sheet.is-glass .conv-row input { color: var(--white); }
-.sheet.is-glass .conv-cur { background: rgba(255, 255, 255, .12); box-shadow: none; color: var(--white); }
-.sheet.is-glass .conv-code, .sheet.is-glass .conv-cur b { color: var(--white); }
-.sheet.is-glass .conv-sep .round-btn { background: rgba(30, 55, 70, .9); color: var(--white); border-color: rgba(255, 255, 255, .25); }
-.sheet.is-glass .conv-manual summary { color: #bfe3f5; }
-.sheet.is-glass .field-label { color: rgba(255, 255, 255, .7); }
-.sheet.is-glass .field input { background: rgba(255, 255, 255, .1); color: var(--white); border-color: rgba(255, 255, 255, .2); }
-.sheet.is-glass .link-btn { color: #bfe3f5; }
-.sheet.is-glass b { color: inherit; }
+:is(.sheet.is-glass, .glass-scope) .sheet-grip { background: rgba(255, 255, 255, .35); }
+:is(.sheet.is-glass, .glass-scope) .kicker { color: rgba(255, 255, 255, .7); }
+:is(.sheet.is-glass, .glass-scope) .icon-btn { color: var(--white); }
+:is(.sheet.is-glass, .glass-scope) .fine, :is(.sheet.is-glass, .glass-scope) .muted, :is(.sheet.is-glass, .glass-scope) .day-summary { color: rgba(255, 255, 255, .72); }
+:is(.sheet.is-glass, .glass-scope) .day-summary span:first-child { color: var(--white); }
+:is(.sheet.is-glass, .glass-scope) .hourly, :is(.sheet.is-glass, .glass-scope) .card { background: rgba(255, 255, 255, .07); box-shadow: 0 0 0 1px rgba(255, 255, 255, .14); color: var(--white); }
+:is(.sheet.is-glass, .glass-scope) .hourly li { border-color: rgba(255, 255, 255, .12); }
+:is(.sheet.is-glass, .glass-scope) .h-time, :is(.sheet.is-glass, .glass-scope) .h-wind { color: rgba(255, 255, 255, .65); }
+:is(.sheet.is-glass, .glass-scope) .h-rain { color: #9fd0f2; }
+:is(.sheet.is-glass, .glass-scope) .h-bar i { background: var(--white); }
+:is(.sheet.is-glass, .glass-scope) .week button { color: var(--white); }
+:is(.sheet.is-glass, .glass-scope) .week small { color: rgba(255, 255, 255, .65); }
+:is(.sheet.is-glass, .glass-scope) .week button.is-on { background: rgba(255, 255, 255, .14); border-color: rgba(255, 255, 255, .25); box-shadow: none; }
+:is(.sheet.is-glass, .glass-scope) .wi-cloud { fill: #eef3f6; }
+:is(.sheet.is-glass, .glass-scope) .clocks { margin-top: 14px; max-width: none; }
+:is(.sheet.is-glass, .glass-scope) .conv-row { background: rgba(255, 255, 255, .08); }
+:is(.sheet.is-glass, .glass-scope) .conv-row input { color: var(--white); }
+:is(.sheet.is-glass, .glass-scope) .conv-cur { background: rgba(255, 255, 255, .12); box-shadow: none; color: var(--white); }
+:is(.sheet.is-glass, .glass-scope) .conv-code, :is(.sheet.is-glass, .glass-scope) .conv-cur b { color: var(--white); }
+:is(.sheet.is-glass, .glass-scope) .conv-sep .round-btn { background: rgba(30, 55, 70, .9); color: var(--white); border-color: rgba(255, 255, 255, .25); }
+:is(.sheet.is-glass, .glass-scope) .conv-manual summary { color: #bfe3f5; }
+:is(.sheet.is-glass, .glass-scope) .field-label { color: rgba(255, 255, 255, .7); }
+:is(.sheet.is-glass, .glass-scope) .field input { background: rgba(255, 255, 255, .1); color: var(--white); border-color: rgba(255, 255, 255, .2); }
+:is(.sheet.is-glass, .glass-scope) .link-btn { color: #bfe3f5; }
+:is(.sheet.is-glass, .glass-scope) b { color: inherit; }
 
 /* ---- Menu lateral ---- */
 .sidenav { display: none; }
@@ -845,9 +845,9 @@ a.ch:active { background: var(--paper-2); }
   .page-body, .chapters, .map-hero, .docs-hero, .page > section:first-child { padding-left: max(108px, calc((100vw - 1100px) / 2)) !important; }
   .boarding-index { left: 120px !important; }
 }
-.sheet.is-glass .clock-diff b { color: var(--navy); }
-.sheet.is-glass .clocks { padding: 14px; gap: 6px; }
-.sheet.is-glass .clock strong { font-size: clamp(28px, 8.4vw, 42px); }
+:is(.sheet.is-glass, .glass-scope) .clock-diff b { color: var(--navy); }
+:is(.sheet.is-glass, .glass-scope) .clocks { padding: 14px; gap: 6px; }
+:is(.sheet.is-glass, .glass-scope) .clock strong { font-size: clamp(28px, 8.4vw, 42px); }
 .clock { min-width: 0; }
 .clock .mono-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
 /* A barra do topo é transparente na home: deixa os cliques passarem para os indicadores. */
@@ -860,3 +860,66 @@ a.ch:active { background: var(--paper-2); }
   .ht-script { font-size: clamp(42px, min(15vw, 10vh), 130px); }
   .ht-small { font-size: clamp(34px, min(12.4vw, 8.2vh), 128px); }
 }
+
+/* ---- Seção da passagem: cartão + mapa + câmbio ---- */
+.boarding-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; max-width: 1040px; margin: 0 auto; text-align: left; }
+.boarding-main, .boarding-side, .bcard { min-width: 0; }
+.bcard-fx .conv-row input { min-width: 0; width: 100%; }
+.boarding-main { display: flex; align-items: center; justify-content: center; }
+.boarding-main .window { flex: 0 1 auto; margin: 0; }
+.boarding-side { display: grid; gap: 20px; align-content: start; }
+.bcard {
+  position: relative; overflow: hidden; border-radius: 26px; padding: 22px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, .09), rgba(255, 255, 255, .03));
+  border: 1px solid rgba(255, 255, 255, .16);
+  box-shadow: 0 24px 50px rgba(0, 0, 0, .22), inset 0 1px 0 rgba(255, 255, 255, .12);
+  color: var(--white);
+}
+.bcard-kicker { display: block; font: 500 10.5px var(--mono); letter-spacing: .16em; text-transform: uppercase; color: rgba(255, 255, 255, .62); }
+.bcard-title { margin: 6px 0 8px; font: 400 clamp(22px, 2.4vw, 28px)/1.1 var(--sans); letter-spacing: -.01em; text-transform: none; }
+.bcard-text { margin: 0 0 16px; max-width: 30ch; font-size: 14.5px; line-height: 1.45; color: rgba(255, 255, 255, .74); min-height: 2.9em; }
+
+/* Mapa */
+.bcard-map { background: radial-gradient(120% 90% at 100% 0%, rgba(90, 150, 170, .28), transparent 60%), linear-gradient(160deg, rgba(255, 255, 255, .09), rgba(255, 255, 255, .03)); }
+.bcard-map-art { position: absolute; right: -26px; top: -26px; width: 170px; height: 170px; pointer-events: none; opacity: .9; }
+.bcard-map-art circle { fill: none; stroke: rgba(255, 255, 255, .14); }
+.bcard-map-art .road { fill: none; stroke: rgba(255, 255, 255, .2); stroke-width: 2; stroke-dasharray: 2 5; stroke-linecap: round; }
+.bcard-map-art .me { fill: var(--orange); stroke: rgba(240, 164, 126, .45); stroke-width: 8; }
+.bcard-map-art .pin { fill: rgba(255, 255, 255, .85); stroke: none; }
+.bcard-map .bcard-kicker, .bcard-map .bcard-title, .bcard-map .bcard-text { position: relative; max-width: calc(100% - 96px); }
+.bcard-chips { display: flex; flex-wrap: wrap; gap: 8px; position: relative; }
+.bchip {
+  display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 13px; border-radius: 999px; cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, .22); background: rgba(255, 255, 255, .06); color: var(--white); font: 500 13.5px var(--sans);
+  transition: background .15s, border-color .15s;
+}
+.bchip:hover { background: rgba(255, 255, 255, .14); border-color: rgba(255, 255, 255, .38); }
+.bchip:focus-visible, .bbtn:focus-visible, .blink:focus-visible { outline: 2px solid var(--white); outline-offset: 2px; }
+.bcard-foot { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px 16px; margin-top: 18px; padding-top: 16px; border-top: 1px solid rgba(255, 255, 255, .12); }
+.bbtn { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border-radius: 999px; border: 0; cursor: pointer;
+  background: var(--white); color: var(--navy); font: 500 14px var(--sans); }
+.bbtn:disabled { opacity: .7; cursor: progress; }
+.bcard-ok { display: inline-flex; align-items: center; gap: 8px; font: 500 13px var(--sans); color: rgba(255, 255, 255, .85); }
+.blink { display: inline-flex; align-items: center; gap: 6px; color: var(--white); text-decoration: none; font: 500 14px var(--sans); }
+.blink:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+/* Câmbio */
+.bcard-fx .bcard-title { margin-bottom: 14px; }
+.bcard-fx .card { padding: 0; background: none !important; box-shadow: none !important; }
+.bcard-fx .conv-row { padding: 10px 12px; }
+.bcard-fx .conv-row input { font-size: 28px; }
+.bcard-fx .fine { font-size: 12.5px; margin: 10px 0 0; }
+.bcard-fx .conv-manual { font-size: 13px; }
+
+@media (min-width: 900px) {
+  .boarding { padding: 64px max(64px, 4vw) 72px 150px; }
+  .boarding-grid { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 28px; align-items: stretch; }
+  .boarding-main { padding: 8px 0; }
+  .boarding-main .window { width: min(100%, 380px); }
+  .boarding-side { gap: 22px; }
+  .bcard { padding: 26px; }
+}
+@media (max-width: 899px) {
+  .boarding-side { max-width: 520px; width: 100%; margin: 8px auto 0; }
+}
+@media (max-width: 599px) { .bcard-map-art { opacity: .45; width: 140px; height: 140px; } .bcard-map .bcard-kicker, .bcard-map .bcard-title, .bcard-map .bcard-text { max-width: 100%; } }

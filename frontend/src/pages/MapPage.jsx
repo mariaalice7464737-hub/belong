@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { useApp } from '../AppContext'
 import AfricaMap from '../components/AfricaMap'
 import Icon from '../components/Icon'
@@ -98,8 +99,15 @@ function RegionMap() {
   const cats = guide.nearby
   const fav = useFavorites()
 
+  // Vindo da Home: categoria escolhida e, se permitido, a posição atual.
+  const nav = useLocation().state || {}
+  const near = nav.near ? `${nav.near.lat},${nav.near.lon}` : null
+
   // O que o mapa está mostrando: residência, uma categoria ou uma rota.
-  const [view, setView] = useState({ kind: 'home' })
+  const [view, setView] = useState(() => (nav.cat && cats.some((c) => c.id === nav.cat) ? { kind: 'cat', id: nav.cat } : { kind: 'home' }))
+  useEffect(() => {
+    if (nav.cat) document.getElementById('mapa-unico')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, [nav.cat])
   const [routeOpen, setRouteOpen] = useState(false)
   const from = state['route.from'] ?? base
   const to = state['route.to'] ?? ''
@@ -123,7 +131,7 @@ function RegionMap() {
   const cat = view.kind === 'cat' ? cats.find((c) => c.id === view.id) : null
   const src =
     view.kind === 'route' ? mapsDirEmbed(view.from, view.to, view.mode)
-      : cat ? mapsEmbed(`${cat.search} near ${base}`)
+      : cat ? mapsEmbed(`${cat.search} near ${near || base}`)
         : mapsEmbed(h.map_query)
   const curTo = view.kind === 'route' ? view.to : to
   // Se o destino é um lugar da lista, o favorito herda o nome e a categoria dele.
@@ -218,7 +226,7 @@ function RegionMap() {
       {cat && (
         <div className="region-list">
           <div className="group-head">
-            <span className="mono-label">{cat.label} perto da residência</span>
+            <span className="mono-label">{cat.label} {near ? 'perto de você' : 'perto da residência'}</span>
             <button type="button" className="link-btn" onClick={goHome}>Fechar</button>
           </div>
           <PlaceList items={cat.items.map((it) => ({ ...it, category: cat.id }))} onRoute={routeTo} base={base} empty="Nada separado ainda nessa categoria." />

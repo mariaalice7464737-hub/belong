@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useApp } from '../AppContext'
 import { PassCarousel } from '../components/BoardingPass'
 import Icon from '../components/Icon'
@@ -150,6 +150,83 @@ function LivePanel() {
   )
 }
 
+/* ---------- Perto de você: acesso rápido ao mapa ---------- */
+const distKm = (a, b) => {
+  const R = 6371, rad = (x) => (x * Math.PI) / 180
+  const dLat = rad(b.lat - a.lat), dLon = rad(b.lon - a.lon)
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(rad(a.lat)) * Math.cos(rad(b.lat)) * Math.sin(dLon / 2) ** 2
+  return 2 * R * Math.asin(Math.sqrt(h))
+}
+
+function NearbyCard() {
+  const { guide } = useApp()
+  const navigate = useNavigate()
+  const home = guide.destinations.home
+  const cats = (guide.home_nearby || []).map((id) => guide.nearby.find((c) => c.id === id)).filter(Boolean)
+  const [loc, setLoc] = useState(null) // { lat, lon }
+  const [status, setStatus] = useState('idle') // idle | asking | ok | denied | unsupported
+
+  const ask = () => {
+    if (!('geolocation' in navigator)) { setStatus('unsupported'); return }
+    setStatus('asking')
+    navigator.geolocation.getCurrentPosition(
+      (p) => { setLoc({ lat: p.coords.latitude, lon: p.coords.longitude }); setStatus('ok') },
+      () => setStatus('denied'),
+      { enableHighAccuracy: false, timeout: 10000, maximumAge: 5 * 60 * 1000 },
+    )
+  }
+  const go = (cat) => navigate('/mapa', { state: { cat, near: loc } })
+  const km = loc ? distKm(loc, home) : null
+  const where = {
+    idle: 'Mostrando o que há perto da residência, em Green Point.',
+    asking: 'Pedindo sua localização…',
+    ok: km < 1 ? 'Você está pertinho da residência.' : km < 60 ? `Você está a ${km.toLocaleString('pt-BR', { maximumFractionDigits: 1 })} km da residência.` : 'Você ainda não está em Cape Town: mostrando o entorno da residência.',
+    denied: 'Sem permissão de localização: usando a residência.',
+    unsupported: 'Este navegador não informa a localização: usando a residência.',
+  }[status]
+
+  return (
+    <article className="bcard bcard-map">
+      <svg className="bcard-map-art" viewBox="0 0 160 160" aria-hidden>
+        <circle cx="80" cy="80" r="70" /><circle cx="80" cy="80" r="48" /><circle cx="80" cy="80" r="26" />
+        <path className="road" d="M0 104 C40 96 70 112 160 84 M58 0 C66 50 60 110 72 160" />
+        <circle className="me" cx="80" cy="80" r="5" />
+        <circle className="pin" cx="112" cy="56" r="3.5" /><circle className="pin" cx="46" cy="64" r="3.5" /><circle className="pin" cx="104" cy="118" r="3.5" />
+      </svg>
+      <span className="bcard-kicker">Perto de você</span>
+      <h3 className="bcard-title">O que tem por aqui?</h3>
+      <p className="bcard-text">{where}</p>
+      <div className="bcard-chips">
+        {cats.map((c) => (
+          <button key={c.id} type="button" className="bchip" onClick={() => go(c.id)}>
+            <Icon name={c.icon} size={15} /> {c.label}
+          </button>
+        ))}
+      </div>
+      <div className="bcard-foot">
+        {status !== 'ok' ? (
+          <button type="button" className="bbtn" onClick={ask} disabled={status === 'asking'}>
+            <Icon name="locate" size={16} /> {status === 'asking' ? 'Localizando…' : 'Usar minha localização'}
+          </button>
+        ) : (
+          <span className="bcard-ok"><span className="live-dot" /> Localização ativa</span>
+        )}
+        <Link to="/mapa" className="blink">Abrir o mapa <Icon name="arrow" size={14} /></Link>
+      </div>
+    </article>
+  )
+}
+
+function FxCard() {
+  return (
+    <article className="bcard bcard-fx glass-scope">
+      <span className="bcard-kicker">Câmbio</span>
+      <h3 className="bcard-title">Quanto é em reais?</h3>
+      <Converter />
+    </article>
+  )
+}
+
 const CHAPTERS = [
   { n: '01', title: 'O mapa', sub: 'Províncias, moradia, rotas, lugares perto e favoritos', to: '/mapa', icon: 'map' },
   { n: '02', title: 'Documentos', sub: 'Passaporte, vacinas e comprovantes', to: '/documentos', icon: 'passport' },
@@ -184,11 +261,19 @@ export default function Home() {
           <span>02</span><i /><span>04</span>
         </div>
         <Kicker light>Boarding pass · chapter two</Kicker>
-        <Link to="/documentos" className="window" aria-label="Abrir documentos">
-          <div className="window-glass">
-            <PassCarousel />
+        <div className="boarding-grid">
+          <div className="boarding-main">
+            <Link to="/documentos" className="window" aria-label="Abrir documentos">
+              <div className="window-glass">
+                <PassCarousel />
+              </div>
+            </Link>
           </div>
-        </Link>
+          <div className="boarding-side">
+            <NearbyCard />
+            <FxCard />
+          </div>
+        </div>
       </section>
 
       {/* 3. Índice de capítulos */}

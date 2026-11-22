@@ -220,13 +220,6 @@ function DocsCard() {
   )
 }
 
-const CHAPTERS = [
-  { n: '01', title: 'O mapa', sub: 'Províncias, moradia, rotas, lugares perto e favoritos', to: '/mapa', icon: 'map' },
-  { n: '02', title: 'Documentos', sub: 'Passaporte, vacinas e comprovantes', to: '/documentos', icon: 'passport' },
-  { n: '03', title: 'Essenciais', sub: 'Câmbio, clima, horário, internet e números de emergência', to: '/essenciais', icon: 'clock' },
-  { n: '04', title: 'Orçamento', sub: 'Quanto custa cada mês', soon: true, icon: 'grid' },
-]
-
 export default function Home() {
   return (
     <main className="home">
@@ -266,30 +259,6 @@ export default function Home() {
             <DocsCard />
           </div>
         </div>
-      </section>
-
-      {/* 3. Índice de capítulos */}
-      <section className="chapters">
-        <Kicker>Contents</Kicker>
-        <ol>
-          {CHAPTERS.map((c) => {
-            const inner = (
-              <>
-                <span className="ch-n">{c.n}</span>
-                <span className="ch-text">
-                  <strong>{c.title}</strong>
-                  <small>{c.sub}</small>
-                </span>
-                {c.soon ? <span className="ch-soon">em breve</span> : <Icon name="arrow" />}
-              </>
-            )
-            return (
-              <li key={c.n}>
-                {c.soon ? <div className="ch is-soon">{inner}</div> : <Link to={c.to} className="ch">{inner}</Link>}
-              </li>
-            )
-          })}
-        </ol>
       </section>
 
       <footer className="foot">
